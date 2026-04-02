@@ -1,1 +1,1 @@
-pg bcrypt express cors
+pg bcrypt express cors dotenv
