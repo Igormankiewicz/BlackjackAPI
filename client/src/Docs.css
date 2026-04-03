@@ -1,0 +1,5 @@
+@reference "./index.css";
+
+.description {
+    @apply bg-fedora-blue mt-12;
+}

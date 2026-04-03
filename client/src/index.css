@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* This is the magic line that connects your JS file to Tailwind v4 */
+@config "../tailwind.config.js";
