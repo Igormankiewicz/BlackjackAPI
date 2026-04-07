@@ -1,9 +1,6 @@
-import { useState } from 'react';
 import './Docs.css';
 
 const Docs = () => {
-    const [isOpen, setIsOpen] = useState(true); // Default to open
-
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
         if (element) {
@@ -21,16 +18,8 @@ const Docs = () => {
 
     return (
         <div className="main-container">
-            {/* Toggle Button - Placed outside the nav to stay visible or inside for alignment */}
-            <button 
-                className={`menu-toggle ${isOpen ? 'open' : 'closed'}`} 
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                {isOpen ? '✕' : '☰'}
-            </button>
-
-            <nav className={`side-menu ${isOpen ? 'expanded' : 'collapsed'}`}>
-                <div className="menu-header">BlackJackAPI<br/>Documentation</div>
+            <nav className="side-menu">
+                <div className="menu-header">BlackJackAPI</div>
                 <div className="menu-links">
                     {menuItems.map((item) => (
                         <button 
@@ -38,19 +27,18 @@ const Docs = () => {
                             className="menu-btn" 
                             onClick={() => scrollToSection(item.id)}
                         >
-                            <span className="btn-text">{item.name}</span>
+                            {item.name}
                         </button>
                     ))}
                 </div>
             </nav>
 
-            {/* Content shifts based on menu state */}
-            <div className={`content ${isOpen ? 'shifted' : 'full'}`}>
+            <div className="content">
                 <div id="overview" className="doc-section">
                     <h2>Project Overview</h2>
                     <p>
-                        This application is a multiplayer Blackjack game built using <b>Node.js</b> and <b>PostgreSQL</b>. 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        This application is a multiplayer Blackjack game built using <b>Node.js</b> for the backend logic and <b>PostgreSQL</b> for data persistence. 
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                     </p>
                 </div>
 
@@ -61,21 +49,22 @@ const Docs = () => {
                         <div className="tech-card">PostgreSQL</div>
                         <div className="tech-card">React</div>
                     </div>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 </div>
 
                 <div id="architecture" className="doc-section">
                     <h2>System Architecture</h2>
-                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
                 </div>
 
                 <div id="endpoints" className="doc-section">
                     <h2>API Endpoints</h2>
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
                 </div>
 
                 <div id="examples" className="doc-section">
                     <h2>Implementation Examples</h2>
-                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
                 </div>
             </div>
         </div>
