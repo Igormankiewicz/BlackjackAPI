@@ -2,3 +2,13 @@
 
 /* This is the magic line that connects your JS file to Tailwind v4 */
 @config "../tailwind.config.js";
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Apply smooth scrolling behavior to the whole document */
+html {
+    scroll-behavior: smooth;
+}
