@@ -19,7 +19,7 @@ const Docs = () => {
     return (
         <div className="main-container">
             <nav className="side-menu">
-                <div className="menu-header">BlackJackAPI</div>
+                <div className="menu-header">BlackJackAPI <br/> Documentation</div>
                 <div className="menu-links">
                     {menuItems.map((item) => (
                         <button 
