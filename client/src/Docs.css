@@ -1,0 +1,68 @@
+@reference "./index.css";
+
+.main-container {
+    @apply w-full min-h-screen bg-[#0f172a] text-slate-200 overflow-x-hidden;
+    scroll-behavior: smooth;
+}
+
+/* Toggle Button Style */
+.menu-toggle {
+    @apply fixed top-5 z-50 p-2 rounded-md bg-blue-600 text-white transition-all duration-300;
+    cursor: pointer;
+    border: none;
+}
+
+.menu-toggle.open { left: 240px; } /* Aligns near the edge of open menu */
+.menu-toggle.closed { left: 20px; }
+
+/* Side Menu Logic */
+.side-menu {
+    @apply h-screen bg-[#1e293b] border-r border-blue-500/20 p-6 flex flex-col fixed left-0 top-0 transition-all duration-300 z-40;
+    overflow: hidden;
+}
+
+.side-menu.expanded { width: 280px; opacity: 1; }
+.side-menu.collapsed { width: 0; opacity: 0; padding: 0; }
+
+.menu-header {
+    @apply text-blue-400 font-bold text-xl mb-8 tracking-wider uppercase whitespace-nowrap;
+}
+
+.menu-links {
+    @apply flex flex-col gap-2 w-full;
+}
+
+/* Button Animations */
+.menu-btn {
+    @apply text-left px-4 py-2 rounded-lg text-slate-400 transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden;
+    background: transparent;
+    border: none;
+}
+
+.menu-btn:hover {
+    @apply text-white bg-blue-600/20 translate-x-2;
+    box-shadow: -4px 0 0 #3b82f6;
+}
+
+/* Content Shift Logic */
+.content {
+    @apply p-12 max-w-4xl transition-all duration-300 mx-auto;
+}
+
+.content.shifted { margin-left: 280px; }
+.content.full { margin-left: auto; margin-right: auto; }
+
+/* Section Styling */
+.doc-section { @apply mb-20 scroll-mt-24; }
+
+h2 { @apply text-3xl font-bold text-white mb-6 border-b border-slate-700 pb-2; }
+
+p { @apply text-slate-400 mb-4; }
+
+b { @apply text-blue-400 font-semibold; }
+
+.tech-field { @apply flex gap-4; }
+
+.tech-card {
+    @apply bg-[#1e293b] p-4 rounded-xl border border-slate-700 text-center font-mono text-blue-300;
+}
