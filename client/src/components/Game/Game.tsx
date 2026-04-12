@@ -75,12 +75,15 @@ const Game = () => {
                 {game.finished && !game.busted && <div className="status-msg stay">You Stayed</div>}
 
                 <div className="game-controls">
-                    {!game.finished && (
-                        <>
-                            <button onClick={() => handleAction('draw')} className="hit-btn">Hit</button>
-                            <button onClick={() => handleAction('stop')} className="stay-btn">Stay</button>
-                        </>
-                    )}
+                    <div className="game-btns">
+                        {!game.finished && (
+                            <>
+                                <button onClick={() => handleAction('draw')} className="hit-btn">Hit</button>
+                                <button onClick={() => handleAction('stop')} className="stay-btn">Stay</button>
+                            </>
+                        )}
+                    </div>
+                    
                     <button onClick={handleQuit} className="quit-btn">Back to Menu</button>
                 </div>
             </div>

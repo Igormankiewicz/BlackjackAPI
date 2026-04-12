@@ -38,7 +38,11 @@
 
 /* Control Panel */
 .game-controls {
-    @apply flex gap-8 justify-center border-t border-slate-800 pt-8;
+    @apply flex flex-col gap-8 justify-center items-center border-t border-slate-800 pt-8;
+}
+
+.game-btns {
+    @apply flex gap-4 flex-row
 }
 
 .hit-btn {
@@ -50,5 +54,5 @@
 }
 
 .quit-btn {
-    @apply absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-500 hover:text-red-400 transition-colors text-sm font-medium bg-transparent border-none cursor-pointer;
+    @apply bottom-8 left-1/2 text-slate-500 hover:text-red-400 transition-colors text-sm font-medium bg-transparent border-none cursor-pointer;
 }
