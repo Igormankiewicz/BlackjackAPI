@@ -4,6 +4,8 @@ const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const { host } = require('pg/lib/defaults');
 const app = express();
+const cors = require('cors');
+app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
