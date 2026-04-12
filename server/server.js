@@ -419,6 +419,17 @@ app.post('/closeGame', async (req, res) => {
     }
 });
 
+// ===== displaying all avaliable rooms =====
+
+app.get('/displayRomms', async (req, res) => {
+    const result = await pool.query('SELECT * FROM rooms') 
+            
+    console.log(req.ip + " | got data")
+    return res.status(200).json({
+        roomsData: result.rows
+    })
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
 console.log(`Server is running on http://localhost:${PORT}`)})
