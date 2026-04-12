@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Auth from './components/Auth/Auth';
+import Menu from './components/Menu/Menu';
 import Docs from './Docs';
 import './App.css';
 
@@ -14,6 +15,9 @@ function App() {
         <Route path="/login" element={<Auth mode="login" />} />
         <Route path="/register" element={<Auth mode="register" />} />
         
+        {/* Menu Route */}
+        <Route path="/menu" element={<Menu />} />
+
         {/* Game/Docs Routes */}
         <Route path="/docs" element={<Docs />} />
         

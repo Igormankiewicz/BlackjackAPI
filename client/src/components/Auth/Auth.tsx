@@ -29,7 +29,7 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
 
             if (response.ok) {
                 localStorage.setItem('user', JSON.stringify(data.user))
-                navigate('/docs')
+                navigate('/menu')
             } else {
                 setError(data.error || 'Access Denied')
             }
