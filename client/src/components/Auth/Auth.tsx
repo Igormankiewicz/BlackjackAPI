@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import './Auth.css'
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import './Auth.css';
 
 interface AuthProps {
     mode: 'login' | 'register'
@@ -28,51 +28,60 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
             const data = await response.json()
 
             if (response.ok) {
-                // Store user info in localStorage for session persistence
                 localStorage.setItem('user', JSON.stringify(data.user))
-                alert(mode === 'login' ? 'Welcome back!' : 'Account created!')
-                navigate('/docs') // Move to Docs after success
+                navigate('/docs')
             } else {
-                setError(data.error || 'Something went wrong')
+                setError(data.error || 'Access Denied')
             }
         } catch (err) {
-            setError('Server connection failed. Is your Node server running?')
+            setError('Connection refused. Check backend.')
         }
     }
 
     return (
         <div className="auth-container">
             <div className="auth-card">
-                <h2>{mode === 'login' ? 'BlackJack Login' : 'Create Account'}</h2>
-                <form onSubmit={handleSubmit}>
+                <div className="auth-header">
+                    <span className="auth-title">BlackJackAPI</span>
+                    <h2 className="auth-subtitle">{mode === 'login' ? 'System Login' : 'User Registration'}</h2>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="auth-form">
                     <div className="input-group">
-                        <label>Username</label>
+                        <label className="input-label">Username</label>
                         <input 
                             type="text" 
+                            className="auth-input"
                             value={username} 
                             onChange={(e) => setUsername(e.target.value)} 
+                            placeholder="Enter credentials..."
                             required 
                         />
                     </div>
                     <div className="input-group">
-                        <label>Password</label>
+                        <label className="input-label">Password</label>
                         <input 
                             type="password" 
+                            className="auth-input"
                             value={password} 
                             onChange={(e) => setPassword(e.target.value)} 
+                            placeholder="••••••••"
                             required 
                         />
                     </div>
-                    {error && <p className="error-msg">{error}</p>}
-                    <button type="submit" className="auth-btn">
-                        {mode === 'login' ? 'Login' : 'Register'}
+                    
+                    {error && <div className="error-banner">{error}</div>}
+                    
+                    <button type="submit" className="submit-btn">
+                        {mode === 'login' ? 'Authenticate' : 'Initialize Account'}
                     </button>
                 </form>
+
                 <div className="auth-footer">
                     {mode === 'login' ? (
-                        <p>New player? <Link to="/register">Register here</Link></p>
+                        <p>New user detected? <Link to="/register" className="auth-link">Register</Link></p>
                     ) : (
-                        <p>Already have an account? <Link to="/login">Login here</Link></p>
+                        <p>Credentials exist? <Link to="/login" className="auth-link">Login</Link></p>
                     )}
                 </div>
             </div>
