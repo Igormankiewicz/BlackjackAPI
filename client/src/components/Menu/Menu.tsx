@@ -42,13 +42,19 @@ const Menu = () => {
         initialize();
     }, [navigate]);
 
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        navigate('/login');
+    };
+
     const fetchRooms = async () => {
         try {
-            // Updated to match the corrected endpoint name
-            const response = await fetch('http://localhost:3000/rooms');
+            // Updated to the correct endpoint defined in server.js
+            const response = await fetch('http://localhost:3000/displayRooms');
             if (response.ok) {
                 const data = await response.json();
-                setRooms(data);
+                // Server returns { roomsData: [...] }
+                setRooms(data.roomsData);
             }
         } catch (error) {
             console.error('Error fetching rooms:', error);
@@ -87,6 +93,7 @@ const Menu = () => {
                 <div className="nav-logo">BlackJack<span>API</span></div>
                 <div className="nav-actions">
                     <button className="nav-link-btn" onClick={() => navigate('/docs')}>Docs</button>
+                    <button className="nav-logout-btn" onClick={handleLogout}>Logout</button>
                     <div className="user-profile">
                         <span className="user-label">Player:</span>
                         <span className="user-name">{user?.name}</span>

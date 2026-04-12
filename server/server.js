@@ -424,13 +424,24 @@ app.post('/closeGame', async (req, res) => {
 // ===== displaying all avaliable rooms =====
 
 app.get('/displayRooms', async (req, res) => {
-    const result = await pool.query('SELECT * FROM rooms') 
-            
-    console.log(req.ip + " | got data")
-    return res.status(200).json({
-        roomsData: result.rows
-    })
-})
+    try {
+        // This query calculates how many players are in each room
+        const result = await pool.query(`
+            SELECT id, 
+            (CASE WHEN "player1Id" IS NOT NULL THEN 1 ELSE 0 END + 
+             CASE WHEN "player2Id" IS NOT NULL THEN 1 ELSE 0 END + 
+             CASE WHEN "player3Id" IS NOT NULL THEN 1 ELSE 0 END) AS player_count
+            FROM rooms
+        `);
+        
+        console.log(req.ip + " | rooms fetched");
+        return res.status(200).json({
+            roomsData: result.rows
+        });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch rooms" });
+    }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
