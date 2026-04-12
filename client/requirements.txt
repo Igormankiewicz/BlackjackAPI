@@ -1,1 +1,1 @@
-tailwindcss
+tailwindcss react-router-dom

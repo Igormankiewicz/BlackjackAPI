@@ -1,0 +1,60 @@
+@reference "../../index.css";
+
+.auth-container {
+    @apply w-full h-screen bg-[#0f172a] flex items-center justify-center text-slate-200;
+}
+
+.auth-card {
+    @apply w-full max-w-md bg-[#1e293b] border border-blue-500/20 p-10 rounded-xl shadow-2xl;
+}
+
+.auth-header {
+    @apply mb-8 text-center;
+}
+
+.auth-title {
+    @apply text-blue-400 font-bold tracking-widest uppercase text-sm block mb-2;
+}
+
+.auth-subtitle {
+    @apply text-2xl font-bold text-white border-none pb-0 mb-0;
+}
+
+.auth-form {
+    @apply flex flex-col gap-6;
+}
+
+.input-label {
+    @apply text-slate-400 text-xs uppercase tracking-wider font-semibold mb-2 block;
+}
+
+.auth-input {
+    @apply w-full bg-[#0f172a] border border-slate-700 rounded-lg px-4 py-3 text-slate-200 transition-all duration-300;
+}
+
+.auth-input:focus {
+    @apply outline-none border-blue-500 ring-1 ring-blue-500/50;
+}
+
+.submit-btn {
+    @apply w-full py-3 rounded-lg bg-blue-600 text-white font-bold tracking-wide transition-all duration-300 uppercase text-sm mt-2;
+    border: none;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    @apply bg-blue-500 shadow-lg shadow-blue-500/20 -translate-y-0.5;
+}
+
+.error-banner {
+    @apply bg-red-500/10 border border-red-500/50 text-red-400 text-xs py-2 px-3 rounded-md text-center animate-pulse;
+}
+
+.auth-footer {
+    @apply mt-8 text-center text-slate-400 text-sm;
+}
+
+.auth-link {
+    @apply text-blue-400 font-bold hover:text-blue-300 transition-colors ml-1;
+    text-decoration: none;
+}
