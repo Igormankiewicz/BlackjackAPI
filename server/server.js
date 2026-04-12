@@ -423,7 +423,7 @@ app.post('/closeGame', async (req, res) => {
 
 // ===== displaying all avaliable rooms =====
 
-app.get('/displayRomms', async (req, res) => {
+app.get('/displayRooms', async (req, res) => {
     const result = await pool.query('SELECT * FROM rooms') 
             
     console.log(req.ip + " | got data")

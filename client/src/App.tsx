@@ -3,6 +3,7 @@ import Auth from './components/Auth/Auth';
 import Menu from './components/Menu/Menu';
 import Docs from './Docs';
 import './App.css';
+import Game from './components/Game/Game';
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
         
         {/* Menu Route */}
         <Route path="/menu" element={<Menu />} />
+        {/* Game Route */}
+        <Route path="/game/:roomId" element={<Game />} />
 
         {/* Game/Docs Routes */}
         <Route path="/docs" element={<Docs />} />

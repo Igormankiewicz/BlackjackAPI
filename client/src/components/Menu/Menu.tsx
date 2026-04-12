@@ -7,31 +7,89 @@ interface User {
     name: string;
 }
 
+interface Room {
+    id: number;
+    player_count: number;
+}
+
 const Menu = () => {
     const [user, setUser] = useState<User | null>(null);
-    const [rooms, setRooms] = useState<any[]>([]); // This would be fetched from DB
+    const [rooms, setRooms] = useState<Room[]>([]);
+    const [isLoading, setIsLoading] = useState(true); // Added to manage initialization
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Retrieve user info saved during login/register
-        const savedUser = localStorage.getItem('user');
-        if (savedUser) {
-            setUser(JSON.parse(savedUser));
-        } else {
-            navigate('/login'); // Redirect if not logged in
-        }
+        const initialize = async () => {
+            const savedUser = localStorage.getItem('user');
+            
+            // Check if user exists once at the start
+            if (savedUser && savedUser !== "undefined") {
+                try {
+                    const parsed = JSON.parse(savedUser);
+                    setUser(parsed);
+                    // Fetch rooms immediately after confirming user
+                    await fetchRooms();
+                } catch (e) {
+                    console.error("Auth parsing error", e);
+                    navigate('/login');
+                }
+            } else {
+                navigate('/login');
+            }
+            setIsLoading(false);
+        };
+
+        initialize();
     }, [navigate]);
+
+    const fetchRooms = async () => {
+        try {
+            // Updated to match the corrected endpoint name
+            const response = await fetch('http://localhost:3000/rooms');
+            if (response.ok) {
+                const data = await response.json();
+                setRooms(data);
+            }
+        } catch (error) {
+            console.error('Error fetching rooms:', error);
+        }
+    };
+
+    const handleCreateRoom = async () => {
+        // Use the current user state; if null, do nothing instead of redirecting
+        if (!user) return; 
+
+        try {
+            const response = await fetch('http://localhost:3000/createLobby', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hostId: user.id }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                navigate(`/game/${data.roomId}`);
+            } else {
+                const errorData = await response.json();
+                alert(errorData.error || 'Failed to create room');
+            }
+        } catch (error) {
+            alert('Server connection error');
+        }
+    };
+
+    // Prevent rendering the UI (which contains the redirect logic) until initialized
+    if (isLoading) return <div className="menu-container">Authenticating...</div>;
 
     return (
         <div className="menu-container">
-            {/* Navigation Bar */}
             <nav className="top-nav">
                 <div className="nav-logo">BlackJack<span>API</span></div>
                 <div className="nav-actions">
                     <button className="nav-link-btn" onClick={() => navigate('/docs')}>Docs</button>
                     <div className="user-profile">
                         <span className="user-label">Player:</span>
-                        <span className="user-name">{user?.name || 'Guest'}</span>
+                        <span className="user-name">{user?.name}</span>
                     </div>
                 </div>
             </nav>
@@ -39,24 +97,32 @@ const Menu = () => {
             <main className="menu-content">
                 <header className="menu-header">
                     <h2>Game Lobby</h2>
-                    <button className="create-room-btn">+ Create New Room</button>
+                    <button className="create-room-btn" onClick={handleCreateRoom}>+ Create New Room</button>
                 </header>
 
                 <div className="room-list-container">
                     <h3>Active Rooms</h3>
                     <div className="room-grid">
-                        {/* Placeholder for actual room data */}
-                        <div className="room-card">
-                            <div className="room-info">
-                                <span className="room-id">Room #102</span>
-                                <span className="room-status">2/3 Players</span>
+                        {rooms.length > 0 ? (
+                            rooms.map((room) => (
+                                <div key={room.id} className="room-card">
+                                    <div className="room-info">
+                                        <span className="room-id">Room #{room.id}</span>
+                                        <span className="room-status">{room.player_count}/3 Players</span>
+                                    </div>
+                                    <button 
+                                        className="join-btn" 
+                                        disabled={room.player_count >= 3}
+                                    >
+                                        {room.player_count >= 3 ? 'Full' : 'Join Table'}
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="room-card empty">
+                                <p>No active rooms found.</p>
                             </div>
-                            <button className="join-btn">Join Table</button>
-                        </div>
-                        
-                        <div className="room-card empty">
-                            <p>No other active rooms found.</p>
-                        </div>
+                        )}
                     </div>
                 </div>
             </main>
