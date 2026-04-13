@@ -19,7 +19,7 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
         const endpoint = mode === 'login' ? '/login' : '/register'
         
         try {
-            const response = await fetch(`http://localhost:3000${endpoint}`, {
+            const response = await fetch(`http://${window.location.hostname}:3000${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
@@ -29,7 +29,7 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
 
             if (response.ok) {
                 localStorage.setItem('user', JSON.stringify(data.user))
-                navigate('/docs')
+                navigate('/menu')
             } else {
                 setError(data.error || 'Access Denied')
             }
