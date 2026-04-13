@@ -61,7 +61,7 @@ p { @apply text-slate-400 mb-4; }
 
 b { @apply text-blue-400 font-semibold; }
 
-.tech-field { @apply flex gap-4; }
+.tech-field { @apply flex gap-4 mb-6; }
 
 .tech-card {
     @apply bg-[#1e293b] p-4 rounded-xl border border-slate-700 text-center font-mono text-blue-300;

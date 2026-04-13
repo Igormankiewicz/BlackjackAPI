@@ -100,8 +100,10 @@ const Game = () => {
     // Leaderboard View
     if (isGameOver) {
         const sortedPlayers = [...players].sort((a, b) => {
-            const aBust = a.points > 21 && a.points !== 22;
-            const bBust = b.points > 21 && b.points !== 22;
+            const aDoubleAce = a.points === 22 && a.cards.split(',').length === 2;
+            const bDoubleAce = b.points === 22 && b.cards.split(',').length === 2;
+            const aBust = a.points > 21 && !aDoubleAce;
+            const bBust = b.points > 21 && !bDoubleAce;
             
             if (aBust && !bBust) return 1;
             if (!aBust && bBust) return -1;
@@ -114,13 +116,14 @@ const Game = () => {
                     <h2>Game Over - Leaderboard</h2>
                     <div className="leaderboard-list">
                         {sortedPlayers.map((p, i) => {
-                            const isBust = p.points > 21 && p.points !== 22;
+                            const isDoubleAce = p.points === 22 && p.cards.split(',').length === 2;
+                            const isBust = p.points > 21 && !isDoubleAce;
                             return (
                                 <div key={p.id} className={`leaderboard-row ${isBust ? 'bust-row' : ''}`}>
                                     <div className="place">{i + 1}</div>
                                     <div className="name">{p.name} {p.id === user.id ? <span className="text-blue-400 text-xs ml-2">(You)</span> : ''}</div>
                                     <div className="score">{p.points} pts</div>
-                                    <div className="status">{isBust ? 'BUSTED' : (p.points === 22 ? 'DOUBLE ACE' : 'STAYED')}</div>
+                                    <div className="status">{isBust ? 'BUSTED' : (isDoubleAce ? 'DOUBLE ACE' : 'STAYED')}</div>
                                 </div>
                             );
                         })}
@@ -180,8 +183,8 @@ const Game = () => {
                             )) : null}
                         </div>
 
-                        {me.points > 21 && me.points !== 22 && <div className="status-msg bust">BUSTED!</div>}
-                        {me.haslost && (me.points <= 21 || me.points === 22) && <div className="status-msg stay">You Stayed</div>}
+                        {me.points > 21 && !(me.points === 22 && me.cards.split(',').length === 2) && <div className="status-msg bust">BUSTED!</div>}
+                        {me.haslost && (me.points <= 21 || (me.points === 22 && me.cards.split(',').length === 2)) && <div className="status-msg stay">You Stayed</div>}
 
                         <div className="game-controls pt-4! mt-4! border-t-0">
                             {!me.haslost ? (

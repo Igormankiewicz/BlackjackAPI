@@ -112,7 +112,7 @@ const Menu = () => {
     return (
         <div className="menu-container">
             <nav className="top-nav">
-                <div className="nav-logo">BlackJack<span>API</span></div>
+                <div className="nav-logo">BlackJack</div>
                 <div className="nav-actions">
                     <button className="nav-link-btn" onClick={() => navigate('/docs')}>Docs</button>
                     <button className="nav-logout-btn" onClick={handleLogout}>Logout</button>
