@@ -597,5 +597,39 @@ app.get('/displayRooms', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-console.log(`Server is running on http://0.0.0.0:${PORT}`)})
+
+// Initialize Database on Startup (Wipe ghost rooms)
+const initDB = async () => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        
+        // Find and drop all dynamic turns tables
+        const tablesResult = await client.query(`
+            SELECT table_name 
+            FROM information_schema.tables 
+            WHERE table_schema = 'public' AND table_name LIKE 'turns_%'
+        `);
+        
+        for (let row of tablesResult.rows) {
+            await client.query(`DROP TABLE IF EXISTS ${row.table_name}`);
+        }
+        
+        // Wipe the rooms table
+        await client.query('DELETE FROM rooms');
+        
+        await client.query('COMMIT');
+        console.log('Database cleaned up: Ghost rooms and tables removed.');
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error cleaning up database on startup:', err);
+    } finally {
+        client.release();
+    }
+};
+
+initDB().then(() => {
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server is running on http://0.0.0.0:${PORT}`);
+    });
+});

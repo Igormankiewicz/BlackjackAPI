@@ -20,6 +20,8 @@ const Menu = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        let interval: ReturnType<typeof setInterval>;
+
         const initialize = async () => {
             const savedUser = localStorage.getItem('user');
             
@@ -30,6 +32,9 @@ const Menu = () => {
                     setUser(parsed);
                     // Fetch rooms immediately after confirming user
                     await fetchRooms();
+                    
+                    // Poll for active rooms every 3 seconds
+                    interval = setInterval(fetchRooms, 3000);
                 } catch (e) {
                     console.error("Auth parsing error", e);
                     navigate('/login');
@@ -41,6 +46,10 @@ const Menu = () => {
         };
 
         initialize();
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
     }, [navigate]);
 
     const handleLogout = () => {
@@ -100,7 +109,9 @@ const Menu = () => {
                 navigate(`/game/${data.roomId}`, { state: { cards: data.cards, score: data.score } });
             } else {
                 const errorData = await response.json();
-                alert(errorData.error || 'Failed to join room');
+                alert(errorData.error || 'Failed to join room. It may no longer exist.');
+                // Refresh list if the join fails (e.g. room was destroyed)
+                await fetchRooms();
             }
         } catch (error) {
             alert('Server connection error');
