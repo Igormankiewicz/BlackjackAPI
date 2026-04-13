@@ -409,6 +409,69 @@ app.post('/joinLobby', async (req, res) => {
     }
 });
 
+app.post('/leaveLobby', async (req, res) => {
+    const { playerId, roomId } = req.body;
+
+    if (!playerId || !roomId) {
+        return res.status(400).json({ error: 'Player ID and Room ID are required' });
+    }
+
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        const roomResult = await client.query(
+            'SELECT "player1Id", "player2Id", "player3Id", "turnTableId" FROM rooms WHERE id = $1 FOR UPDATE',
+            [roomId]
+        );
+
+        if (roomResult.rows.length === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({ error: 'Room not found' });
+        }
+
+        const room = roomResult.rows[0];
+        const tableName = room.turnTableId;
+        const pId = parseInt(playerId, 10);
+
+        // If the HOST (player1Id) leaves, destroy the entire room immediately
+        if (room.player1Id === pId) {
+            await client.query(`DROP TABLE IF EXISTS ${tableName}`);
+            await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
+            await client.query('COMMIT');
+            return res.status(200).json({ message: 'Host left, room destroyed' });
+        }
+
+        // Remove non-host player from the dynamic turns table
+        await client.query(`DELETE FROM ${tableName} WHERE "playerid" = $1`, [pId]);
+
+        // Remove non-host player from the rooms table
+        if (room.player2Id === pId) {
+            await client.query('UPDATE rooms SET "player2Id" = NULL WHERE id = $1', [roomId]);
+        } else if (room.player3Id === pId) {
+            await client.query('UPDATE rooms SET "player3Id" = NULL WHERE id = $1', [roomId]);
+        }
+
+        // Check if the room is now empty (just in case)
+        const remainingPlayers = await client.query(`SELECT COUNT(*) FROM ${tableName}`);
+        
+        if (parseInt(remainingPlayers.rows[0].count, 10) === 0) {
+            await client.query(`DROP TABLE IF EXISTS ${tableName}`);
+            await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
+        }
+
+        await client.query('COMMIT');
+        res.status(200).json({ message: 'Successfully left the lobby' });
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error leaving lobby:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    } finally {
+        client.release();
+    }
+});
+
 // ===== close game and cleanup =====
 
 app.post('/closeGame', async (req, res) => {
@@ -515,11 +578,13 @@ app.get('/displayRooms', async (req, res) => {
     try {
         // This query calculates how many players are in each room
         const result = await pool.query(`
-            SELECT id, 
-            (CASE WHEN "player1Id" IS NOT NULL THEN 1 ELSE 0 END + 
-             CASE WHEN "player2Id" IS NOT NULL THEN 1 ELSE 0 END + 
-             CASE WHEN "player3Id" IS NOT NULL THEN 1 ELSE 0 END) AS player_count
-            FROM rooms
+            SELECT r.id, 
+            (CASE WHEN r."player1Id" IS NOT NULL THEN 1 ELSE 0 END + 
+             CASE WHEN r."player2Id" IS NOT NULL THEN 1 ELSE 0 END + 
+             CASE WHEN r."player3Id" IS NOT NULL THEN 1 ELSE 0 END) AS player_count,
+            u.name as host_name
+            FROM rooms r
+            LEFT JOIN users u ON r."player1Id" = u.id
         `);
         
         console.log(req.ip + " | rooms fetched");
@@ -532,5 +597,39 @@ app.get('/displayRooms', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-console.log(`Server is running on http://0.0.0.0:${PORT}`)})
+
+// Initialize Database on Startup (Wipe ghost rooms)
+const initDB = async () => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        
+        // Find and drop all dynamic turns tables
+        const tablesResult = await client.query(`
+            SELECT table_name 
+            FROM information_schema.tables 
+            WHERE table_schema = 'public' AND table_name LIKE 'turns_%'
+        `);
+        
+        for (let row of tablesResult.rows) {
+            await client.query(`DROP TABLE IF EXISTS ${row.table_name}`);
+        }
+        
+        // Wipe the rooms table
+        await client.query('DELETE FROM rooms');
+        
+        await client.query('COMMIT');
+        console.log('Database cleaned up: Ghost rooms and tables removed.');
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error cleaning up database on startup:', err);
+    } finally {
+        client.release();
+    }
+};
+
+initDB().then(() => {
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server is running on http://0.0.0.0:${PORT}`);
+    });
+});

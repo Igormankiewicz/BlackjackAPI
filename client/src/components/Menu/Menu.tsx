@@ -10,6 +10,7 @@ interface User {
 interface Room {
     id: number;
     player_count: number;
+    host_name: string;
 }
 
 const Menu = () => {
@@ -19,6 +20,8 @@ const Menu = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        let interval: ReturnType<typeof setInterval>;
+
         const initialize = async () => {
             const savedUser = localStorage.getItem('user');
             
@@ -29,6 +32,9 @@ const Menu = () => {
                     setUser(parsed);
                     // Fetch rooms immediately after confirming user
                     await fetchRooms();
+                    
+                    // Poll for active rooms every 3 seconds
+                    interval = setInterval(fetchRooms, 3000);
                 } catch (e) {
                     console.error("Auth parsing error", e);
                     navigate('/login');
@@ -40,6 +46,10 @@ const Menu = () => {
         };
 
         initialize();
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
     }, [navigate]);
 
     const handleLogout = () => {
@@ -99,7 +109,9 @@ const Menu = () => {
                 navigate(`/game/${data.roomId}`, { state: { cards: data.cards, score: data.score } });
             } else {
                 const errorData = await response.json();
-                alert(errorData.error || 'Failed to join room');
+                alert(errorData.error || 'Failed to join room. It may no longer exist.');
+                // Refresh list if the join fails (e.g. room was destroyed)
+                await fetchRooms();
             }
         } catch (error) {
             alert('Server connection error');
@@ -136,7 +148,8 @@ const Menu = () => {
                             rooms.map((room) => (
                                 <div key={room.id} className="room-card">
                                     <div className="room-info">
-                                        <span className="room-id">Room #{room.id}</span>
+                                        <span className="room-host">{room.host_name}'s room</span>
+                                        <span className="room-id">Room ID: '{room.id}'</span>
                                         <span className="room-status">{room.player_count}/3 Players</span>
                                     </div>
                                     <button 

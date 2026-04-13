@@ -21,6 +21,29 @@ This project provides a complete multiplayer blackjack experience, featuring a c
 - Standard Blackjack rules (Aces count as 1 or 11, Blackjack/Busts detected)
 - Dynamic database tables for tracking turns and points per room
 
+## How to Play
+
+- **Objective:** Beat the other players by getting a hand value as close to 21 as possible without going over (busting).
+- **Card Values:** Number cards are worth their face value. Face cards (J, Q, K) are worth 10. Aces are worth 1 or 11.
+- **Actions:** 
+  - **Draw:** Take another card to increase your hand value.
+  - **Stop:** Keep your current hand and end your turn.
+- **Winning:** The player with the highest score that is 21 or under wins the game.
+
+## Lobby Management (Creating & Joining)
+
+### How to Make a Room (Host)
+1. Go to the main Menu.
+2. Click the blue **"+ Create New Room"** button.
+3. The server automatically creates your room and redirects you to the game table.
+4. Wait for other players to join. You can "Close Room" when the game finishes to clean up server resources.
+
+### How to Join a Room (Player)
+1. Look at the **"Active Rooms"** section on the main Menu.
+2. Find an available room (max 3 players) labeled with the host's name (e.g., "user1's room").
+3. Click the **"Join Table"** button on the room card.
+4. You will instantly enter the lobby. You can **"Leave Room"** at any point. If everyone leaves, the room deletes itself.
+
 ## API Endpoints
 
 ### User Management
