@@ -36,6 +36,7 @@ const Game = () => {
     const [isGameOver, setIsGameOver] = useState(false);
     const [showLeaderboard, setShowLeaderboard] = useState(false);
     const [hostId, setHostId] = useState<number | null>(null);
+    const [kickMessage, setKickMessage] = useState<string | null>(null);
     
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
@@ -47,8 +48,11 @@ const Game = () => {
             try {
                 const res = await fetch(`http://${window.location.hostname}:3000/roomState/${roomId}`);
                 if (res.status === 404) {
-                    // Room might have been closed by host
-                    navigate('/menu');
+                    // Room closed by host or last person left
+                    setKickMessage("Host left or room closed. Returning to Menu...");
+                    setTimeout(() => {
+                        navigate('/menu');
+                    }, 3000);
                     return;
                 }
                 if (res.ok) {
@@ -131,6 +135,17 @@ const Game = () => {
             navigate('/menu');
         }
     };
+
+    if (kickMessage) {
+        return (
+            <div className="game-container">
+                <div className="status-msg text-red-400 bg-slate-800 p-8 rounded-xl border border-red-500/30 text-center shadow-lg animate-pulse">
+                    <h3 className="text-2xl font-bold mb-2">{kickMessage}</h3>
+                    <p className="text-slate-400 text-sm">You will be redirected shortly.</p>
+                </div>
+            </div>
+        );
+    }
 
     if (players.length === 0) return <div className="game-container"><div className="status-msg text-white">Loading game...</div></div>;
 

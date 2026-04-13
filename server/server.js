@@ -435,19 +435,25 @@ app.post('/leaveLobby', async (req, res) => {
         const tableName = room.turnTableId;
         const pId = parseInt(playerId, 10);
 
-        // Remove player from the dynamic turns table
+        // If the HOST (player1Id) leaves, destroy the entire room immediately
+        if (room.player1Id === pId) {
+            await client.query(`DROP TABLE IF EXISTS ${tableName}`);
+            await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
+            await client.query('COMMIT');
+            return res.status(200).json({ message: 'Host left, room destroyed' });
+        }
+
+        // Remove non-host player from the dynamic turns table
         await client.query(`DELETE FROM ${tableName} WHERE "playerid" = $1`, [pId]);
 
-        // Remove player from the rooms table
-        if (room.player1Id === pId) {
-            await client.query('UPDATE rooms SET "player1Id" = NULL WHERE id = $1', [roomId]);
-        } else if (room.player2Id === pId) {
+        // Remove non-host player from the rooms table
+        if (room.player2Id === pId) {
             await client.query('UPDATE rooms SET "player2Id" = NULL WHERE id = $1', [roomId]);
         } else if (room.player3Id === pId) {
             await client.query('UPDATE rooms SET "player3Id" = NULL WHERE id = $1', [roomId]);
         }
 
-        // Check if the room is now empty
+        // Check if the room is now empty (just in case)
         const remainingPlayers = await client.query(`SELECT COUNT(*) FROM ${tableName}`);
         
         if (parseInt(remainingPlayers.rows[0].count, 10) === 0) {
