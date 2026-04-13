@@ -74,10 +74,32 @@ const Menu = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                navigate(`/game/${data.roomId}`);
+                navigate(`/game/${data.roomId}`, { state: { cards: data.cards, score: data.score } });
             } else {
                 const errorData = await response.json();
                 alert(errorData.error || 'Failed to create room');
+            }
+        } catch (error) {
+            alert('Server connection error');
+        }
+    };
+
+    const handleJoinRoom = async (roomId: number) => {
+        if (!user) return;
+        
+        try {
+            const response = await fetch('http://localhost:3000/joinLobby', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ playerId: user.id, roomId }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                navigate(`/game/${data.roomId}`, { state: { cards: data.cards, score: data.score } });
+            } else {
+                const errorData = await response.json();
+                alert(errorData.error || 'Failed to join room');
             }
         } catch (error) {
             alert('Server connection error');
@@ -119,6 +141,7 @@ const Menu = () => {
                                     </div>
                                     <button 
                                         className="join-btn" 
+                                        onClick={() => handleJoinRoom(room.id)}
                                         disabled={room.player_count >= 3}
                                     >
                                         {room.player_count >= 3 ? 'Full' : 'Join Table'}

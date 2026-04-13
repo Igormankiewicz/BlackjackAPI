@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import './Game.css';
 
 interface GameState {
@@ -12,9 +12,11 @@ interface GameState {
 const Game = () => {
     const { roomId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+    
     const [game, setGame] = useState<GameState>({
-        cards: '',
-        score: 0,
+        cards: location.state?.cards || '',
+        score: location.state?.score || 0,
         busted: false,
         finished: false
     });
@@ -43,10 +45,16 @@ const Game = () => {
                         cards: prev.cards ? `${prev.cards},${data.card}` : data.card,
                         score: data.score,
                         busted: data.busted,
-                        finished: data.busted // If busted, the turn is over
+                        finished: data.finished
                     }));
                 } else {
                     setGame(prev => ({ ...prev, finished: true }));
+                }
+
+                // Add game over check
+                if (data.isGameOver) {
+                    console.log("Everyone has finished! Time to check who won.");
+                    // You can fetch a new endpoint here to get all players' scores and announce the winner.
                 }
             }
         } catch (error) {

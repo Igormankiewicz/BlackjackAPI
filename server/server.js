@@ -24,13 +24,13 @@ pool.connect()
 function calculateScore(cardsString) {
     if (!cardsString) return 0;
     
-    const cards = cardsString.split(',');
+    const cards = cardsString.split(',').filter(c => c !== '');
+    if (cards.length === 0) return 0;
+
     let total = 0;
     let aces = 0;
 
     cards.forEach(card => {
-        // Extract the value part (everything before the suit name)
-        // e.g., "10spades" -> "10", "Qhearts" -> "Q"
         const value = card.replace(/(spades|hearts|diamonds|clubs)/, '');
 
         if (['J', 'Q', 'K'].includes(value)) {
@@ -42,6 +42,11 @@ function calculateScore(cardsString) {
             total += parseInt(value);
         }
     });
+
+    // Special Win: Exactly 2 cards and both are Aces = 22 points
+    if (cards.length === 2 && aces === 2) {
+        return 22; // Double Ace win!
+    }
 
     // If we busted but have Aces, turn 11s into 1s
     while (total > 21 && aces > 0) {
@@ -195,9 +200,10 @@ app.post('/createLobby', async (req, res) => {
         );
 
         const cardString = getRandomCard() + "," + getRandomCard()
+        const initialScore = calculateScore(cardString);
 
         await client.query(
-            `INSERT INTO ${turnTableName} ("playerid", "points", "cards") VALUES ($1, $2, $3)`, [hostId, calculateScore(cardString), cardString]
+            `INSERT INTO ${turnTableName} ("playerid", "points", "cards") VALUES ($1, $2, $3)`, [hostId, initialScore, cardString]
         )
 
         await client.query('COMMIT'); // Save changes
@@ -205,7 +211,9 @@ app.post('/createLobby', async (req, res) => {
         res.status(201).json({ 
             message: 'Lobby created successfully', 
             roomId, 
-            turnTable: turnTableName 
+            turnTable: turnTableName,
+            cards: cardString,
+            score: initialScore
         });
 
     } catch (err) {
@@ -226,7 +234,6 @@ app.post('/playTurn', async (req, res) => {
     const client = await pool.connect();
 
     try {
-        // 1. Get current player status
         const playerQuery = await client.query(
             `SELECT cards, hasLost FROM ${tableName} WHERE playerId = $1`,
             [playerId]
@@ -239,37 +246,51 @@ app.post('/playTurn', async (req, res) => {
         let { cards, haslost } = playerQuery.rows[0];
 
         if (haslost) {
-            return res.status(400).json({ error: "Player has already lost/finished" });
+            return res.status(400).json({ error: "Player has already finished their turn" });
         }
 
-        if (action === 'draw') {
-            const newCard = getRandomCard();
-            // Append the card: if empty, just the card; otherwise, add a comma
-            const updatedCards = cards ? `${cards},${newCard}` : newCard;
-            const newScore = calculateScore(updatedCards);
-            const busted = newScore > 21;
+        let newCard = null;
+        let newScore = calculateScore(cards);
+        let finished = false;
+        let busted = false;
 
-            // 2. Update the database
+        if (action === 'draw') {
+            newCard = getRandomCard();
+            const updatedCards = cards ? `${cards},${newCard}` : newCard;
+            newScore = calculateScore(updatedCards);
+            
+            // If they get the special Double Ace (22) or go over 21 without double ace, they are finished
+            busted = newScore > 21 && newScore !== 22;
+            finished = busted || newScore === 22 || newScore === 21;
+
             await client.query(`
                 UPDATE ${tableName} 
                 SET cards = $1, points = $2, hasLost = $3 
                 WHERE playerId = $4`,
-                [updatedCards, newScore, busted, playerId]
+                [updatedCards, newScore, finished, playerId]
             );
-
-            return res.json({ 
-                message: busted ? "Busted!" : "Card drawn", 
-                card: newCard, 
-                score: newScore, 
-                busted 
-            });
-
         } else if (action === 'stop') {
-            // Player decides to stay with their current score
-            // We can treat hasLost as "Finished" or add a new 'stayed' column
+            finished = true;
             await client.query(`UPDATE ${tableName} SET hasLost = true WHERE playerId = $1`, [playerId]);
-            return res.json({ message: "Player stayed" });
         }
+
+        // Check if ALL players in the room are now finished
+        const remainingPlayers = await client.query(`SELECT id FROM ${tableName} WHERE hasLost = false`);
+        const isGameOver = remainingPlayers.rows.length === 0;
+
+        if (isGameOver) {
+            await client.query(`DROP TABLE IF EXISTS ${tableName}`);
+            await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
+        }
+
+        return res.json({ 
+            message: busted ? "Busted!" : (action === 'stop' ? "Player stayed" : "Card drawn"), 
+            card: newCard, 
+            score: newScore, 
+            busted: busted,
+            finished: finished,
+            isGameOver: isGameOver // The frontend can use this to show a "Game Over" screen
+        });
 
     } catch (err) {
         console.error(err);
@@ -332,10 +353,10 @@ app.post('/joinLobby', async (req, res) => {
             [playerId, roomId]
         );
 
-        // 3. Initialize the player in the turns table
+        // 3. Initialize the player in the turns table with NO cards and 0 points
         const turnTableName = room.turnTableId;
-        const cardString = getRandomCard() + "," + getRandomCard();
-        const initialScore = calculateScore(cardString);
+        const cardString = getRandomCard() + "," + getRandomCard(); // Start with 2 cards
+        const initialScore = calculateScore(cardString); // Calculate initial score
 
         await client.query(
             `INSERT INTO ${turnTableName} ("playerid", "points", "cards") VALUES ($1, $2, $3)`,
