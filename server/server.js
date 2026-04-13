@@ -278,11 +278,6 @@ app.post('/playTurn', async (req, res) => {
         const remainingPlayers = await client.query(`SELECT id FROM ${tableName} WHERE hasLost = false`);
         const isGameOver = remainingPlayers.rows.length === 0;
 
-        if (isGameOver) {
-            await client.query(`DROP TABLE IF EXISTS ${tableName}`);
-            await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
-        }
-
         return res.json({ 
             message: busted ? "Busted!" : (action === 'stop' ? "Player stayed" : "Card drawn"), 
             card: newCard, 
@@ -439,6 +434,45 @@ app.post('/closeGame', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     } finally {
         client.release();
+    }
+});
+
+// ===== fetching room state =====
+
+app.get('/roomState/:roomId', async (req, res) => {
+    const { roomId } = req.params;
+
+    try {
+        const roomResult = await pool.query(
+            'SELECT "player1Id", "turnTableId" FROM rooms WHERE id = $1',
+            [roomId]
+        );
+
+        if (roomResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Room not found' });
+        }
+
+        const turnTableId = roomResult.rows[0].turnTableId;
+        const hostId = roomResult.rows[0].player1Id;
+
+        const playersResult = await pool.query(`
+            SELECT t.playerid as id, t.points, t.cards, t.haslost, u.name 
+            FROM ${turnTableId} t
+            JOIN users u ON t.playerid = u.id
+        `);
+
+        // A player haslost if they bust, stay, or win (22 points).
+        // It's game over if ALL players in the room have haslost = true.
+        const isGameOver = playersResult.rows.length > 0 && playersResult.rows.every(p => p.haslost);
+
+        res.status(200).json({
+            players: playersResult.rows,
+            isGameOver,
+            hostId
+        });
+    } catch (err) {
+        console.error('Error fetching room state:', err);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
