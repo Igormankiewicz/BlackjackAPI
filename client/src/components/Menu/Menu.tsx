@@ -50,7 +50,7 @@ const Menu = () => {
     const fetchRooms = async () => {
         try {
             // Updated to the correct endpoint defined in server.js
-            const response = await fetch('http://localhost:3000/displayRooms');
+            const response = await fetch(`http://${window.location.hostname}:3000/displayRooms`);
             if (response.ok) {
                 const data = await response.json();
                 // Server returns { roomsData: [...] }
@@ -66,7 +66,7 @@ const Menu = () => {
         if (!user) return; 
 
         try {
-            const response = await fetch('http://localhost:3000/createLobby', {
+            const response = await fetch(`http://${window.location.hostname}:3000/createLobby`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ hostId: user.id }),
@@ -88,7 +88,7 @@ const Menu = () => {
         if (!user) return;
         
         try {
-            const response = await fetch('http://localhost:3000/joinLobby', {
+            const response = await fetch(`http://${window.location.hostname}:3000/joinLobby`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ playerId: user.id, roomId }),

@@ -26,7 +26,7 @@ const Game = () => {
 
         const fetchRoomState = async () => {
             try {
-                const res = await fetch(`http://localhost:3000/roomState/${roomId}`);
+                const res = await fetch(`http://${window.location.hostname}:3000/roomState/${roomId}`);
                 if (res.status === 404) {
                     // Room might have been closed by host
                     navigate('/menu');
@@ -51,7 +51,7 @@ const Game = () => {
 
     const handleAction = async (action: 'draw' | 'stop') => {
         try {
-            const response = await fetch('http://localhost:3000/playTurn', {
+            const response = await fetch(`http://${window.location.hostname}:3000/playTurn`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -63,7 +63,7 @@ const Game = () => {
 
             if (response.ok) {
                 // Instantly fetch the updated state instead of waiting for the interval
-                const res = await fetch(`http://localhost:3000/roomState/${roomId}`);
+                const res = await fetch(`http://${window.location.hostname}:3000/roomState/${roomId}`);
                 if (res.ok) {
                     const data = await res.json();
                     setPlayers(data.players);
@@ -77,7 +77,7 @@ const Game = () => {
 
     const handleCloseRoom = async () => {
         try {
-            await fetch('http://localhost:3000/closeGame', {
+            await fetch(`http://${window.location.hostname}:3000/closeGame`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ roomId }),
