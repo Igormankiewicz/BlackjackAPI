@@ -55,7 +55,8 @@
     @apply bg-[#1e293b] p-6 rounded-xl border border-slate-700 flex justify-between items-center transition-all hover:border-blue-500/50;
 }
 
-.room-id { @apply block text-lg font-bold text-white; }
+.room-host { @apply block text-lg font-bold text-white; }
+.room-id { @apply block text-sm text-slate-500 font-mono mt-1; }
 .room-status { @apply text-sm text-blue-400 font-mono; }
 
 .join-btn {

@@ -10,6 +10,7 @@ interface User {
 interface Room {
     id: number;
     player_count: number;
+    host_name: string;
 }
 
 const Menu = () => {
@@ -136,7 +137,8 @@ const Menu = () => {
                             rooms.map((room) => (
                                 <div key={room.id} className="room-card">
                                     <div className="room-info">
-                                        <span className="room-id">Room #{room.id}</span>
+                                        <span className="room-host">{room.host_name}'s room</span>
+                                        <span className="room-id">Room ID: '{room.id}'</span>
                                         <span className="room-status">{room.player_count}/3 Players</span>
                                     </div>
                                     <button 

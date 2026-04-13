@@ -13,6 +13,7 @@ const Docs = () => {
 
     const menuItems = [
         { name: 'Overview', id: 'overview' },
+        { name: 'How to Play', id: 'how-to-play' },
         { name: 'Setup Instructions', id: 'setup' },
         { name: 'Technologies', id: 'technologies' },
         { name: 'Architecture', id: 'architecture' },
@@ -50,6 +51,18 @@ const Docs = () => {
                         This application is a real-time multiplayer Blackjack API built using <b>Node.js</b> for the robust backend logic, <b>PostgreSQL</b> for reliable data persistence, and a highly responsive <b>React</b> frontend. 
                         It allows users to register, create persistent game lobbies, and seamlessly play rounds of Blackjack against others on the same local network. The state is synchronized across clients through an efficient polling mechanism.
                     </p>
+                </div>
+
+                <div id="how-to-play" className="doc-section">
+                    <h2>How to Play</h2>
+                    <p>
+                        Blackjack is a classic card game where the goal is to beat the dealer's hand without going over 21. In our multiplayer mode, you compete to have the best hand against other players.
+                    </p>
+                    <ul className="list-disc ml-6 mt-4 text-slate-300">
+                        <li className="mb-2"><strong>Card Values:</strong> Number cards (2-10) are worth their face value. Face cards (Jack, Queen, King) are worth 10. Aces can be worth 1 or 11, whichever is more favorable to your hand.</li>
+                        <li className="mb-2"><strong>Gameplay:</strong> You can choose to "Draw" (take another card to increase your score) or "Stop" (keep your current hand and end your turn).</li>
+                        <li className="mb-2"><strong>Winning:</strong> You win if your hand's total is closer to 21 than the other players, or if the other players bust. If your hand exceeds 21, you bust and automatically lose.</li>
+                    </ul>
                 </div>
 
                 <div id="setup" className="doc-section">

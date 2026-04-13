@@ -21,6 +21,15 @@ This project provides a complete multiplayer blackjack experience, featuring a c
 - Standard Blackjack rules (Aces count as 1 or 11, Blackjack/Busts detected)
 - Dynamic database tables for tracking turns and points per room
 
+## How to Play
+
+- **Objective:** Beat the other players by getting a hand value as close to 21 as possible without going over (busting).
+- **Card Values:** Number cards are worth their face value. Face cards (J, Q, K) are worth 10. Aces are worth 1 or 11.
+- **Actions:** 
+  - **Draw:** Take another card to increase your hand value.
+  - **Stop:** Keep your current hand and end your turn.
+- **Winning:** The player with the highest score that is 21 or under wins the game.
+
 ## API Endpoints
 
 ### User Management

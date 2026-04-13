@@ -515,11 +515,13 @@ app.get('/displayRooms', async (req, res) => {
     try {
         // This query calculates how many players are in each room
         const result = await pool.query(`
-            SELECT id, 
-            (CASE WHEN "player1Id" IS NOT NULL THEN 1 ELSE 0 END + 
-             CASE WHEN "player2Id" IS NOT NULL THEN 1 ELSE 0 END + 
-             CASE WHEN "player3Id" IS NOT NULL THEN 1 ELSE 0 END) AS player_count
-            FROM rooms
+            SELECT r.id, 
+            (CASE WHEN r."player1Id" IS NOT NULL THEN 1 ELSE 0 END + 
+             CASE WHEN r."player2Id" IS NOT NULL THEN 1 ELSE 0 END + 
+             CASE WHEN r."player3Id" IS NOT NULL THEN 1 ELSE 0 END) AS player_count,
+            u.name as host_name
+            FROM rooms r
+            LEFT JOIN users u ON r."player1Id" = u.id
         `);
         
         console.log(req.ip + " | rooms fetched");
