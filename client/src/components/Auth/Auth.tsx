@@ -42,7 +42,7 @@ const Auth: React.FC<AuthProps> = ({ mode }) => {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <span className="auth-title">BlackJackAPI</span>
+                    <span className="auth-title">BlackJack</span>
                     <h2 className="auth-subtitle">{mode === 'login' ? 'System Login' : 'User Registration'}</h2>
                 </div>
                 

@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import './Docs.css';
 
 const Docs = () => {
+    const navigate = useNavigate();
+
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
         if (element) {
@@ -19,8 +22,14 @@ const Docs = () => {
     return (
         <div className="main-container">
             <nav className="side-menu expanded">
-                <div className="menu-header">BlackJackAPI <br/> Documentation</div>
+                <div className="menu-header">BlackJack <br/> Documentation</div>
                 <div className="menu-links">
+                    <button 
+                        className="menu-btn text-blue-400 mb-4" 
+                        onClick={() => navigate('/menu')}
+                    >
+                        ← Back to Menu
+                    </button>
                     {menuItems.map((item) => (
                         <button 
                             key={item.id} 
@@ -44,7 +53,7 @@ const Docs = () => {
 
                 <div id="technologies" className="doc-section">
                     <h2>Technologies Used</h2>
-                    <div className="tech-field mb-6">
+                    <div className="tech-field">
                         <div className="tech-card">Node.js</div>
                         <div className="tech-card">PostgreSQL</div>
                         <div className="tech-card">React</div>
