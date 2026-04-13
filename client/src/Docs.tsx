@@ -1,6 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import './Docs.css';
 
+import card2H from './assets/cards/hearts/2.png';
+import card5S from './assets/cards/spades/5.png';
+import card8D from './assets/cards/diamond/8.png';
+import card10C from './assets/cards/clubs/10.png';
+
+import cardQH from './assets/cards/hearts/q.png';
+import cardJS from './assets/cards/spades/j.png';
+import cardKD from './assets/cards/diamond/k.png';
+
+import aceS from './assets/cards/spades/1.png';
+import aceH from './assets/cards/hearts/1.png';
+
 const Docs = () => {
     const navigate = useNavigate();
 
@@ -14,6 +26,7 @@ const Docs = () => {
     const menuItems = [
         { name: 'Overview', id: 'overview' },
         { name: 'How to Play', id: 'how-to-play' },
+        { name: 'Lobby Management', id: 'lobby-management' },
         { name: 'Setup Instructions', id: 'setup' },
         { name: 'Technologies', id: 'technologies' },
         { name: 'Architecture', id: 'architecture' },
@@ -59,10 +72,53 @@ const Docs = () => {
                         Blackjack is a classic card game where the goal is to beat the dealer's hand without going over 21. In our multiplayer mode, you compete to have the best hand against other players.
                     </p>
                     <ul className="list-disc ml-6 mt-4 text-slate-300">
-                        <li className="mb-2"><strong>Card Values:</strong> Number cards (2-10) are worth their face value. Face cards (Jack, Queen, King) are worth 10. Aces can be worth 1 or 11, whichever is more favorable to your hand.</li>
+                        <li className="mb-6">
+                            <strong>Card Values:</strong> Number cards (2-10) are worth their face value. 
+                            <div className="flex gap-4 mt-3 mb-4">
+                                <img src={card2H} alt="2 of Hearts" className="w-16 h-auto shadow-md rounded [image-rendering:pixelated]" />
+                                <img src={card5S} alt="5 of Spades" className="w-16 h-auto shadow-md rounded [image-rendering:pixelated]" />
+                                <img src={card8D} alt="8 of Diamonds" className="w-16 h-auto shadow-md rounded [image-rendering:pixelated]" />
+                                <img src={card10C} alt="10 of Clubs" className="w-16 h-auto shadow-md rounded [image-rendering:pixelated]" />
+                            </div>
+                            Face cards (Jack, Queen, King) are worth 10.
+                            <div className="flex gap-4 mt-3 mb-4">
+                                <img src={cardJS} alt="Jack of Spades" className="w-16 h-auto shadow-md rounded [image-rendering:pixelated]" />
+                                <img src={cardQH} alt="Queen of Hearts" className="w-16 h-auto shadow-md rounded [image-rendering:pixelated]" />
+                                <img src={cardKD} alt="King of Diamonds" className="w-16 h-auto shadow-md rounded [image-rendering:pixelated]" />
+                            </div>
+                            Aces can be worth 1 or 11, whichever is more favorable to your hand.
+                        </li>
+                        <li className="mb-6">
+                            <strong>Double Ace Rule:</strong> If you draw exactly two Aces as your first two cards, this is a special condition known as "Double Ace" (valued at 22 points in our system). This is an automatic win against anyone who doesn't also have a Double Ace!
+                            <div className="flex gap-4 mt-3 mb-2">
+                                <img src={aceS} alt="Ace of Spades" className="w-16 h-auto shadow-md rounded [image-rendering:pixelated]" />
+                                <img src={aceH} alt="Ace of Hearts" className="w-16 h-auto shadow-md rounded [image-rendering:pixelated]" />
+                            </div>
+                        </li>
                         <li className="mb-2"><strong>Gameplay:</strong> You can choose to "Draw" (take another card to increase your score) or "Stop" (keep your current hand and end your turn).</li>
                         <li className="mb-2"><strong>Winning:</strong> You win if your hand's total is closer to 21 than the other players, or if the other players bust. If your hand exceeds 21, you bust and automatically lose.</li>
                     </ul>
+                </div>
+
+                <div id="lobby-management" className="doc-section">
+                    <h2>Lobby Management</h2>
+                    <p className="mb-4">Here is a step-by-step tutorial on how to create and join game rooms.</p>
+                    
+                    <h3 className="text-xl font-bold mt-6 mb-2 text-white">Creating a Room (Host)</h3>
+                    <ol className="list-decimal ml-6 mt-2 text-slate-300">
+                        <li className="mb-2">From the main Menu, click the blue <strong>"+ Create New Room"</strong> button.</li>
+                        <li className="mb-2">The server will automatically generate a new room, assign it an ID, and place you inside.</li>
+                        <li className="mb-2">Wait for other players to join. You will see them appear in the "Waiting for others" section at the top of the game board.</li>
+                        <li className="mb-2">As the Host, you have the special ability to <strong>"Close Room"</strong> when the game is over, which kicks everyone out and cleans up the server data.</li>
+                    </ol>
+
+                    <h3 className="text-xl font-bold mt-6 mb-2 text-white">Joining a Room (Player)</h3>
+                    <ol className="list-decimal ml-6 mt-2 text-slate-300">
+                        <li className="mb-2">Look at the <strong>"Active Rooms"</strong> grid on the main Menu.</li>
+                        <li className="mb-2">Find a room that isn't full (rooms hold up to 3 players). You can identify who created it by the header (e.g., <em>"user1's room"</em>).</li>
+                        <li className="mb-2">Click the <strong>"Join Table"</strong> button on the room card.</li>
+                        <li className="mb-2">You will instantly enter the game and be dealt your starting hand. At any point, you can click <strong>"Leave Room"</strong> to exit back to the Menu. If you are the last person to leave, the room safely deletes itself.</li>
+                    </ol>
                 </div>
 
                 <div id="setup" className="doc-section">

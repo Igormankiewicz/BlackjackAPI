@@ -409,6 +409,63 @@ app.post('/joinLobby', async (req, res) => {
     }
 });
 
+app.post('/leaveLobby', async (req, res) => {
+    const { playerId, roomId } = req.body;
+
+    if (!playerId || !roomId) {
+        return res.status(400).json({ error: 'Player ID and Room ID are required' });
+    }
+
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        const roomResult = await client.query(
+            'SELECT "player1Id", "player2Id", "player3Id", "turnTableId" FROM rooms WHERE id = $1 FOR UPDATE',
+            [roomId]
+        );
+
+        if (roomResult.rows.length === 0) {
+            await client.query('ROLLBACK');
+            return res.status(404).json({ error: 'Room not found' });
+        }
+
+        const room = roomResult.rows[0];
+        const tableName = room.turnTableId;
+        const pId = parseInt(playerId, 10);
+
+        // Remove player from the dynamic turns table
+        await client.query(`DELETE FROM ${tableName} WHERE "playerid" = $1`, [pId]);
+
+        // Remove player from the rooms table
+        if (room.player1Id === pId) {
+            await client.query('UPDATE rooms SET "player1Id" = NULL WHERE id = $1', [roomId]);
+        } else if (room.player2Id === pId) {
+            await client.query('UPDATE rooms SET "player2Id" = NULL WHERE id = $1', [roomId]);
+        } else if (room.player3Id === pId) {
+            await client.query('UPDATE rooms SET "player3Id" = NULL WHERE id = $1', [roomId]);
+        }
+
+        // Check if the room is now empty
+        const remainingPlayers = await client.query(`SELECT COUNT(*) FROM ${tableName}`);
+        
+        if (parseInt(remainingPlayers.rows[0].count, 10) === 0) {
+            await client.query(`DROP TABLE IF EXISTS ${tableName}`);
+            await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
+        }
+
+        await client.query('COMMIT');
+        res.status(200).json({ message: 'Successfully left the lobby' });
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error leaving lobby:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    } finally {
+        client.release();
+    }
+});
+
 // ===== close game and cleanup =====
 
 app.post('/closeGame', async (req, res) => {

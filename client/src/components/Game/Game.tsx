@@ -34,6 +34,7 @@ const Game = () => {
     
     const [players, setPlayers] = useState<Player[]>([]);
     const [isGameOver, setIsGameOver] = useState(false);
+    const [showLeaderboard, setShowLeaderboard] = useState(false);
     const [hostId, setHostId] = useState<number | null>(null);
     
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -66,6 +67,17 @@ const Game = () => {
 
         return () => clearInterval(interval);
     }, [roomId, navigate]);
+
+    useEffect(() => {
+        if (isGameOver) {
+            const timer = setTimeout(() => {
+                setShowLeaderboard(true);
+            }, 3500); // 3.5 seconds delay
+            return () => clearTimeout(timer);
+        } else {
+            setShowLeaderboard(false);
+        }
+    }, [isGameOver]);
 
     const handleAction = async (action: 'draw' | 'stop') => {
         try {
@@ -106,8 +118,18 @@ const Game = () => {
         }
     };
 
-    const handleQuit = () => {
-        navigate('/menu');
+    const handleQuit = async () => {
+        try {
+            await fetch(`http://${window.location.hostname}:3000/leaveLobby`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ playerId: user.id, roomId }),
+            });
+            navigate('/menu');
+        } catch (e) {
+            console.error(e);
+            navigate('/menu');
+        }
     };
 
     if (players.length === 0) return <div className="game-container"><div className="status-msg text-white">Loading game...</div></div>;
@@ -116,7 +138,7 @@ const Game = () => {
     const others = players.filter(p => p.id !== user.id);
 
     // Leaderboard View
-    if (isGameOver) {
+    if (showLeaderboard) {
         const sortedPlayers = [...players].sort((a, b) => {
             const aDoubleAce = a.points === 22 && a.cards.split(',').length === 2;
             const bDoubleAce = b.points === 22 && b.cards.split(',').length === 2;
