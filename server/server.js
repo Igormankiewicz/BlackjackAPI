@@ -259,9 +259,12 @@ app.post('/playTurn', async (req, res) => {
             const updatedCards = cards ? `${cards},${newCard}` : newCard;
             newScore = calculateScore(updatedCards);
             
-            // If they get the special Double Ace (22) or go over 21 without double ace, they are finished
-            busted = newScore > 21 && newScore !== 22;
-            finished = busted || newScore === 22 || newScore === 21;
+            // A Double Ace win is ONLY exactly 2 cards scoring 22
+            const isDoubleAce = newScore === 22 && updatedCards.split(',').length === 2;
+            
+            // If they go over 21 and it's not a Double Ace, they bust
+            busted = newScore > 21 && !isDoubleAce;
+            finished = busted || isDoubleAce || newScore === 21;
 
             await client.query(`
                 UPDATE ${tableName} 
