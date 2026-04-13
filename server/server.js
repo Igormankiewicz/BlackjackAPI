@@ -57,14 +57,21 @@ function calculateScore(cardsString) {
     return total;
 }
 
-function getRandomCard() {
+function getRandomCard(usedCards = []) {
     const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
     const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
     
-    const randomValue = values[Math.floor(Math.random() * values.length)];
-    const randomSuit = suits[Math.floor(Math.random() * suits.length)];
+    let card;
+    let attempts = 0;
+    do {
+        const randomValue = values[Math.floor(Math.random() * values.length)];
+        const randomSuit = suits[Math.floor(Math.random() * suits.length)];
+        card = `${randomValue}${randomSuit}`;
+        attempts++;
+        if (attempts > 200) break; // Fallback to prevent infinite loops
+    } while (usedCards.includes(card));
     
-    return `${randomValue}${randomSuit}`;
+    return card;
 }
 
 
@@ -199,7 +206,9 @@ app.post('/createLobby', async (req, res) => {
             [turnTableName, roomId]
         );
 
-        const cardString = getRandomCard() + "," + getRandomCard()
+        const card1 = getRandomCard([]);
+        const card2 = getRandomCard([card1]);
+        const cardString = card1 + "," + card2;
         const initialScore = calculateScore(cardString);
 
         await client.query(
@@ -255,7 +264,15 @@ app.post('/playTurn', async (req, res) => {
         let busted = false;
 
         if (action === 'draw') {
-            newCard = getRandomCard();
+            const allCardsQuery = await client.query(`SELECT cards FROM ${tableName}`);
+            let usedCards = [];
+            allCardsQuery.rows.forEach(row => {
+                if (row.cards) {
+                    usedCards.push(...row.cards.split(',').filter(c => c));
+                }
+            });
+
+            newCard = getRandomCard(usedCards);
             const updatedCards = cards ? `${cards},${newCard}` : newCard;
             newScore = calculateScore(updatedCards);
             
@@ -353,7 +370,20 @@ app.post('/joinLobby', async (req, res) => {
 
         // 3. Initialize the player in the turns table with NO cards and 0 points
         const turnTableName = room.turnTableId;
-        const cardString = getRandomCard() + "," + getRandomCard(); // Start with 2 cards
+        
+        // Fetch all previously drawn cards
+        const allCardsQuery = await client.query(`SELECT cards FROM ${turnTableName}`);
+        let usedCards = [];
+        allCardsQuery.rows.forEach(row => {
+            if (row.cards) {
+                usedCards.push(...row.cards.split(',').filter(c => c));
+            }
+        });
+
+        const card1 = getRandomCard(usedCards);
+        usedCards.push(card1);
+        const card2 = getRandomCard(usedCards);
+        const cardString = card1 + "," + card2; // Start with 2 cards
         const initialScore = calculateScore(cardString); // Calculate initial score
 
         await client.query(

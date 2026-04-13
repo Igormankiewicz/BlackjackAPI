@@ -13,6 +13,7 @@ const Docs = () => {
 
     const menuItems = [
         { name: 'Overview', id: 'overview' },
+        { name: 'Setup Instructions', id: 'setup' },
         { name: 'Technologies', id: 'technologies' },
         { name: 'Architecture', id: 'architecture' },
         { name: 'Endpoints', id: 'endpoints' },
@@ -49,6 +50,33 @@ const Docs = () => {
                         This application is a real-time multiplayer Blackjack API built using <b>Node.js</b> for the robust backend logic, <b>PostgreSQL</b> for reliable data persistence, and a highly responsive <b>React</b> frontend. 
                         It allows users to register, create persistent game lobbies, and seamlessly play rounds of Blackjack against others on the same local network. The state is synchronized across clients through an efficient polling mechanism.
                     </p>
+                </div>
+
+                <div id="setup" className="doc-section">
+                    <h2>Setup Instructions</h2>
+                    <p>To run the application locally, you need to configure and start the Node.js server.</p>
+                    
+                    <h3 className="text-xl font-bold mt-6 mb-2 text-white">1. Configure the Environment</h3>
+                    <p className="mb-2">Create a <code>.env</code> file in the <code>server</code> directory with the following variables:</p>
+                    <div className="example-block bg-[#0f172a] rounded-xl border border-slate-700 overflow-hidden mb-6 shadow-lg">
+                        <pre className="p-4 text-sm text-slate-300 overflow-x-auto">
+{`DB_LOGIN=your_postgres_username
+DB_HOST=localhost
+DB_NAME=your_database_name
+DB_PASSWORD=your_postgres_password
+DB_PORT=5432`}
+                        </pre>
+                    </div>
+
+                    <h3 className="text-xl font-bold mt-6 mb-2 text-white">2. Start the Server</h3>
+                    <p className="mb-2">Navigate to the server directory and run the application:</p>
+                    <div className="example-block bg-[#0f172a] rounded-xl border border-slate-700 overflow-hidden mb-6 shadow-lg">
+                        <pre className="p-4 text-sm text-slate-300 overflow-x-auto">
+{`cd server
+npm install
+node server.js`}
+                        </pre>
+                    </div>
                 </div>
 
                 <div id="technologies" className="doc-section">
