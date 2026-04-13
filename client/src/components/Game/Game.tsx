@@ -2,6 +2,24 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Game.css';
 
+const cardImageModules = import.meta.glob('../../assets/cards/**/*.png', { eager: true });
+
+const getCardImageUrl = (cardStr: string) => {
+    if (!cardStr) return '';
+    const match = cardStr.match(/^([0-9]+|[AJQKajqk])(spades|hearts|diamonds|clubs)$/i);
+    if (!match) return '';
+    
+    let value = match[1].toLowerCase();
+    let suit = match[2].toLowerCase();
+    
+    if (value === 'a') value = '1';
+    if (suit === 'diamonds') suit = 'diamond';
+    
+    const key = `../../assets/cards/${suit}/${value}.png`;
+    const mod = cardImageModules[key] as { default: string } | undefined;
+    return mod ? mod.default : '';
+};
+
 interface Player {
     id: number;
     name: string;
@@ -157,9 +175,14 @@ const Game = () => {
                                 {p.name} {p.haslost ? <span className="text-xs text-slate-500 font-normal">(Finished)</span> : ''}
                             </div>
                             <div className="other-cards flex gap-2 flex-wrap justify-center">
-                                {p.cards ? p.cards.split(',').map((c, i) => (
-                                    <div key={i} className="mini-card text-xs font-bold bg-slate-700 border border-slate-600 rounded p-2 text-white shadow-sm flex items-center justify-center">{c}</div>
-                                )) : <div className="mini-card empty text-xs bg-slate-800/50 border border-dashed border-slate-600 rounded p-2 text-slate-600">...</div>}
+                                {p.cards ? p.cards.split(',').map((c, i) => {
+                                    const imgUrl = getCardImageUrl(c);
+                                    return imgUrl ? (
+                                        <img key={i} src={imgUrl} alt={c} className="w-12 h-auto shadow-sm rounded [image-rendering:pixelated]" />
+                                    ) : (
+                                        <div key={i} className="mini-card text-xs font-bold bg-slate-700 border border-slate-600 rounded p-2 text-white shadow-sm flex items-center justify-center">{c}</div>
+                                    );
+                                }) : <div className="mini-card empty text-xs bg-slate-800/50 border border-dashed border-slate-600 rounded p-2 text-slate-600">...</div>}
                             </div>
                         </div>
                     )) : (
@@ -177,10 +200,15 @@ const Game = () => {
                             <div className="score-badge static! mt-0! mb-0! p-2! px-4!">Score: {me.points}</div>
                         </div>
                         
-                        <div className="card-display my-6!">
-                            {me.cards ? me.cards.split(',').map((card, i) => (
-                                <div key={i} className="card-item">{card}</div>
-                            )) : null}
+                        <div className="card-display my-6! flex flex-wrap gap-4 justify-center">
+                            {me.cards ? me.cards.split(',').map((card, i) => {
+                                const imgUrl = getCardImageUrl(card);
+                                return imgUrl ? (
+                                    <img key={i} src={imgUrl} alt={card} className="w-24 h-auto shadow-md rounded-md [image-rendering:pixelated]" />
+                                ) : (
+                                    <div key={i} className="card-item">{card}</div>
+                                );
+                            }) : null}
                         </div>
 
                         {me.points > 21 && !(me.points === 22 && me.cards.split(',').length === 2) && <div className="status-msg bust">BUSTED!</div>}
