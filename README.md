@@ -47,3 +47,6 @@ This project provides a complete multiplayer blackjack experience, featuring a c
 
 The core structure consists of a `users` table and a `rooms` table.
 During active games, dynamic tables (`turns_<roomId>`) are generated to track player hands and scores.
+
+<img width="705" height="619" alt="obraz" src="https://github.com/user-attachments/assets/dec234d1-cfaa-4aae-8607-7ce62feba6c6" />
+
