@@ -1,13 +1,13 @@
 @reference "./index.css";
 
 .main-container {
-    @apply w-full min-h-screen bg-[#0f172a] text-slate-200 overflow-x-hidden;
+    @apply w-full min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text overflow-x-hidden;
     scroll-behavior: smooth;
 }
 
 /* Toggle Button Style */
 .menu-toggle {
-    @apply fixed top-5 z-50 p-2 rounded-md bg-blue-600 text-white transition-all duration-300;
+    @apply fixed top-5 z-50 p-2 rounded-md bg-green-primary text-white transition-all duration-300;
     cursor: pointer;
     border: none;
 }
@@ -17,7 +17,7 @@
 
 /* Side Menu Logic */
 .side-menu {
-    @apply h-screen bg-[#1e293b] border-r border-blue-500/20 p-6 flex flex-col fixed left-0 top-0 transition-all duration-300 z-40;
+    @apply h-screen bg-light-surface dark:bg-dark-surface border-r border-light-border dark:border-dark-border p-6 flex flex-col fixed left-0 top-0 transition-all duration-300 z-40;
     overflow: hidden;
 }
 
@@ -25,7 +25,7 @@
 .side-menu.collapsed { width: 0; opacity: 0; padding: 0; }
 
 .menu-header {
-    @apply text-blue-400 font-bold text-xl mb-8 tracking-wider uppercase whitespace-nowrap;
+    @apply text-green-primary dark:text-green-accent font-bold text-xl mb-8 tracking-wider uppercase whitespace-nowrap;
 }
 
 .menu-links {
@@ -34,14 +34,14 @@
 
 /* Button Animations */
 .menu-btn {
-    @apply text-left px-4 py-2 rounded-lg text-slate-400 transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden;
+    @apply text-left px-4 py-2 rounded-lg text-gray-600 dark:text-gray-400 transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden;
     background: transparent;
     border: none;
 }
 
 .menu-btn:hover {
-    @apply text-white bg-blue-600/20 translate-x-2;
-    box-shadow: -4px 0 0 #3b82f6;
+    @apply text-green-primary dark:text-white bg-green-primary/10 dark:bg-green-primary/20 translate-x-2;
+    box-shadow: -4px 0 0 #10b981; /* green-primary hex */
 }
 
 /* Content Shift Logic */
@@ -55,14 +55,14 @@
 /* Section Styling */
 .doc-section { @apply mb-20 scroll-mt-24; }
 
-h2 { @apply text-3xl font-bold text-white mb-6 border-b border-slate-700 pb-2; }
+h2 { @apply text-3xl font-bold text-light-text dark:text-white mb-6 border-b border-light-border dark:border-dark-border pb-2; }
 
-p { @apply text-slate-400 mb-4; }
+p { @apply text-gray-600 dark:text-gray-400 mb-4; }
 
-b { @apply text-blue-400 font-semibold; }
+b { @apply text-green-primary dark:text-green-accent font-semibold; }
 
 .tech-field { @apply flex gap-4 mb-6; }
 
 .tech-card {
-    @apply bg-[#1e293b] p-4 rounded-xl border border-slate-700 text-center font-mono text-blue-300;
+    @apply bg-light-surface dark:bg-dark-surface p-4 rounded-xl border border-light-border dark:border-dark-border text-center font-mono text-green-primary dark:text-green-accent;
 }
