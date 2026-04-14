@@ -48,8 +48,8 @@ const Game = () => {
             try {
                 const res = await fetch(`http://${window.location.hostname}:3000/roomState/${roomId}`);
                 if (res.status === 404) {
-                    // Room closed by host or last person left
-                    setKickMessage("Host left or room closed. Returning to Menu...");
+                    // Room closed by host, last person left, or inactivity
+                    setKickMessage("Room closed due to inactivity or host leaving. Returning to Menu...");
                     setTimeout(() => {
                         navigate('/menu');
                     }, 3000);

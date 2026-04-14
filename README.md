@@ -48,15 +48,128 @@ This project provides a complete multiplayer blackjack experience, featuring a c
 
 ### User Management
 - `POST /register`: Register a new user
+  *Example Usage:*
+  ```json
+  // Request Payload
+  {
+    "login": "player1",
+    "password": "password123"
+  }
+  ```
+  ```json
+  // Response Payload (200 OK)
+  {
+    "message": "User registered successfully",
+    "user": { "id": 1, "login": "player1" }
+  }
+  ```
 - `POST /login`: Authenticate an existing user
+  *Example Usage:*
+  ```json
+  // Request Payload
+  {
+    "login": "player1",
+    "password": "password123"
+  }
+  ```
+  ```json
+  // Response Payload (200 OK)
+  {
+    "message": "Login successful",
+    "user": { "id": 1, "login": "player1" }
+  }
+  ```
 
 ### Game Management
 - `POST /createLobby`: Create a new game room
+  *Example Usage:*
+  ```json
+  // Request Payload
+  {
+    "hostId": 1,
+    "hostName": "player1"
+  }
+  ```
+  ```json
+  // Response Payload (200 OK)
+  {
+    "message": "Room created successfully",
+    "roomId": 15
+  }
+  ```
 - `POST /joinLobby`: Join an existing game room
+  *Example Usage:*
+  ```json
+  // Request Payload
+  {
+    "playerId": 2,
+    "playerName": "player2",
+    "roomId": 15
+  }
+  ```
+  ```json
+  // Response Payload (200 OK)
+  {
+    "message": "Joined room 15 successfully"
+  }
+  ```
 - `POST /playTurn`: Perform a game action (draw a card or stop)
-- `POST /closeGame`: End a game session and clean up database tables
+  *Example Usage:*
+  ```json
+  // Request Payload
+  {
+    "playerId": 42,
+    "roomId": 15,
+    "action": "draw" // or "stop"
+  }
+  ```
+  ```json
+  // Response Payload (200 OK)
+  {
+    "message": "Card drawn",
+    "card": "10hearts",
+    "score": 21,
+    "busted": false,
+    "finished": true,
+    "isGameOver": false
+  }
+  ```
 - `GET /roomState/:roomId`: Fetch the current status of all players in a room
+  *Example Usage:*
+  ```json
+  // Response Payload (200 OK)
+  {
+    "players": [
+      { "id": 1, "name": "player1", "points": 14, "cards": "10hearts,4spades", "haslost": false }
+    ],
+    "isGameOver": false,
+    "hostId": 1
+  }
+  ```
 - `GET /displayRooms`: Retrieve a list of all active rooms
+  *Example Usage:*
+  ```json
+  // Response Payload (200 OK)
+  {
+    "rooms": [
+      { "roomId": "15", "hostId": 1, "hostName": "player1", "playerCount": 2 }
+    ]
+  }
+  ```
+- `POST /closeGame`: End a game session and clean up database tables
+  *Example Usage:*
+  ```json
+  // Request Payload
+  {
+    "roomId": 15
+  }
+  ```
+  ```json
+  // Response Payload (200 OK)
+  {
+    "message": "Game closed successfully"
+  }
+  ```
 
 ## Setup Instructions
 
