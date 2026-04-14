@@ -1,1 +1,1 @@
-pg bcrypt express cors dotenv
+pg bcrypt express cors dotenv express-rate-limit

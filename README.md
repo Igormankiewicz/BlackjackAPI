@@ -12,6 +12,8 @@ This project provides a complete multiplayer blackjack experience, featuring a c
 - **Frontend**: React, TypeScript, Vite, Tailwind CSS
 - **Database**: PostgreSQL (managed via pgAdmin or standard Postgres tools)
 - **Authentication**: bcrypt for password hashing
+- **Security & Validation**: express-rate-limit for rate limiting (max 50 requests per minute), strict request body parameter validation
+- **Game Logic**: Unknown cards belonging to other players are hidden to prevent cheating unless the requester has busted or the game has concluded
 
 ## Features
 
@@ -134,13 +136,14 @@ This project provides a complete multiplayer blackjack experience, featuring a c
     "isGameOver": false
   }
   ```
-- `GET /roomState/:roomId`: Fetch the current status of all players in a room
+- `GET /roomState/:roomId?playerId=<playerId>`: Fetch the current status of all players in a room (hides cards and points for other players if the requester is still in play)
   *Example Usage:*
   ```json
   // Response Payload (200 OK)
   {
     "players": [
-      { "id": 1, "name": "player1", "points": 14, "cards": "10hearts,4spades", "haslost": false }
+      { "id": 1, "name": "player1", "points": 14, "cards": "10hearts,4spades", "haslost": false },
+      { "id": 2, "name": "player2", "points": 0, "cards": "hidden,hidden", "haslost": false }
     ],
     "isGameOver": false,
     "hostId": 1
