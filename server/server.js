@@ -75,6 +75,46 @@ function getRandomCard(usedCards = []) {
 }
 
 
+
+// ====== Inactivity Timers ======
+const roomTimeouts = {};
+const ROOM_TIMEOUT_MS = 60000; // 60 seconds
+
+function clearRoomTimeout(roomId) {
+    if (roomTimeouts[roomId]) {
+        clearTimeout(roomTimeouts[roomId]);
+        delete roomTimeouts[roomId];
+    }
+}
+
+function resetRoomTimeout(roomId) {
+    clearRoomTimeout(roomId);
+    
+    roomTimeouts[roomId] = setTimeout(async () => {
+        console.log(`Room ${roomId} closed due to inactivity (no moves in 60s).`);
+        const client = await pool.connect();
+        try {
+            await client.query('BEGIN');
+            
+            // Delete the dynamic turns table if it exists
+            const turnTableName = `turns_${roomId}`;
+            await client.query(`DROP TABLE IF EXISTS ${turnTableName}`);
+            
+            // Delete the room from the rooms table
+            await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
+            
+            await client.query('COMMIT');
+        } catch (err) {
+            await client.query('ROLLBACK');
+            console.error(`Failed to clean up inactive room ${roomId}:`, err);
+        } finally {
+            client.release();
+            clearRoomTimeout(roomId);
+        }
+    }, ROOM_TIMEOUT_MS);
+}
+// ===============================
+
 // ====== user register =====
 
 app.post('/register', async (req, res) => {
@@ -217,6 +257,8 @@ app.post('/createLobby', async (req, res) => {
 
         await client.query('COMMIT'); // Save changes
 
+        resetRoomTimeout(roomId);
+
         res.status(201).json({ 
             message: 'Lobby created successfully', 
             roomId, 
@@ -297,6 +339,8 @@ app.post('/playTurn', async (req, res) => {
         // Check if ALL players in the room are now finished
         const remainingPlayers = await client.query(`SELECT id FROM ${tableName} WHERE hasLost = false`);
         const isGameOver = remainingPlayers.rows.length === 0;
+
+        resetRoomTimeout(roomId);
 
         return res.json({ 
             message: busted ? "Busted!" : (action === 'stop' ? "Player stayed" : "Card drawn"), 
@@ -393,6 +437,8 @@ app.post('/joinLobby', async (req, res) => {
 
         await client.query('COMMIT');
 
+        resetRoomTimeout(roomId);
+
         res.status(200).json({
             message: 'Joined lobby successfully',
             roomId,
@@ -440,6 +486,7 @@ app.post('/leaveLobby', async (req, res) => {
             await client.query(`DROP TABLE IF EXISTS ${tableName}`);
             await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
             await client.query('COMMIT');
+            clearRoomTimeout(roomId);
             return res.status(200).json({ message: 'Host left, room destroyed' });
         }
 
@@ -459,6 +506,7 @@ app.post('/leaveLobby', async (req, res) => {
         if (parseInt(remainingPlayers.rows[0].count, 10) === 0) {
             await client.query(`DROP TABLE IF EXISTS ${tableName}`);
             await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
+            clearRoomTimeout(roomId);
         }
 
         await client.query('COMMIT');
@@ -519,6 +567,7 @@ app.post('/closeGame', async (req, res) => {
         await client.query('DELETE FROM rooms WHERE id = $1', [roomId]);
 
         await client.query('COMMIT');
+        clearRoomTimeout(roomId);
 
         res.status(200).json({ 
             message: `Game ${roomId} closed and resources cleaned up successfully.` 
