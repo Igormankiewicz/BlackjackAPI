@@ -139,7 +139,7 @@ const Game = () => {
     if (kickMessage) {
         return (
             <div className="game-container">
-                <div className="status-msg text-red-400 bg-slate-800 p-8 rounded-xl border border-red-500/30 text-center shadow-lg animate-pulse">
+                <div className="status-msg text-red-400 bg-slate-800 p-8 rounded-md border border-red-500/30 text-center shadow-lg animate-pulse">
                     <h3 className="text-2xl font-bold mb-2">{kickMessage}</h3>
                     <p className="text-slate-400 text-sm">You will be redirected shortly.</p>
                 </div>
@@ -176,14 +176,14 @@ const Game = () => {
                             return (
                                 <div key={p.id} className={`leaderboard-row ${isBust ? 'bust-row' : ''}`}>
                                     <div className="place">{i + 1}</div>
-                                    <div className="name">{p.name} {p.id === user.id ? <span className="text-blue-400 text-xs ml-2">(You)</span> : ''}</div>
+                                    <div className="name">{p.name} {p.id === user.id ? <span className="text-green-primary dark:text-green-accent text-xs ml-2">(You)</span> : ''}</div>
                                     <div className="score">{p.points} pts</div>
                                     <div className="status">{isBust ? 'BUSTED' : (isDoubleAce ? 'DOUBLE ACE' : 'STAYED')}</div>
                                 </div>
                             );
                         })}
                     </div>
-                    <div className="flex gap-4 justify-center mt-8">
+                    <div className="flex gap-4 justify-center mt-12 pt-6 border-t border-light-border dark:border-dark-border">
                         {hostId === user.id ? (
                             <button onClick={handleCloseRoom} className="hit-btn">Close Room</button>
                         ) : (
@@ -207,7 +207,7 @@ const Game = () => {
                 {/* Other players section */}
                 <div className="others-container flex justify-center gap-8 mb-8 min-h-[120px]">
                     {others.length > 0 ? others.map(p => (
-                        <div key={p.id} className="other-player-deck flex flex-col items-center bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 w-48">
+                        <div key={p.id} className="other-player-deck flex flex-col items-center bg-slate-800/50 p-4 rounded-md border border-slate-700/50 w-48">
                             <div className="other-name text-sm font-bold text-slate-300 mb-2 truncate max-w-full">
                                 {p.name} {p.haslost ? <span className="text-xs text-slate-500 font-normal">(Finished)</span> : ''}
                             </div>
@@ -233,7 +233,7 @@ const Game = () => {
                 {me && (
                     <div className="my-container relative">
                         <div className="my-header flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-bold text-blue-400">Your Deck</h3>
+                            <h3 className="text-lg font-bold text-green-accent">Your Deck</h3>
                             <div className="score-badge static! mt-0! mb-0! p-2! px-4!">Score: {me.points}</div>
                         </div>
                         

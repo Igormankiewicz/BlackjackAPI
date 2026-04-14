@@ -5,7 +5,7 @@
 }
 
 .game-board {
-    @apply w-full max-w-4xl bg-green-board rounded-2xl border border-green-hover p-8 shadow-2xl shadow-green-primary/10 relative overflow-hidden text-white;
+    @apply w-full max-w-4xl bg-green-board rounded-md border border-green-hover p-8 shadow-2xl shadow-green-primary/10 relative overflow-hidden text-white;
 }
 
 .game-board h2 {
@@ -23,7 +23,7 @@
 }
 
 .card-item {
-    @apply bg-light-surface dark:bg-dark-surface border-2 border-light-border dark:border-dark-border rounded-xl w-24 h-36 flex items-center justify-center 
+    @apply bg-light-surface dark:bg-dark-surface border-2 border-light-border dark:border-dark-border rounded-md w-24 h-36 flex items-center justify-center 
            text-light-text dark:text-dark-text font-bold text-xl shadow-lg transition-all hover:border-green-primary dark:hover:border-green-accent hover:-translate-y-2;
 }
 
@@ -45,11 +45,11 @@
 }
 
 .hit-btn {
-    @apply bg-green-primary hover:bg-green-hover text-white px-8 py-3 rounded-lg font-bold transition-all shadow-lg shadow-green-primary/20;
+    @apply bg-green-primary hover:bg-green-hover text-white px-8 py-3 rounded-md font-bold transition-all shadow-lg shadow-green-primary/20;
 }
 
 .stay-btn {
-    @apply bg-light-surface dark:bg-dark-surface hover:bg-gray-200 dark:hover:bg-gray-700 text-light-text dark:text-dark-text border border-light-border dark:border-dark-border px-8 py-3 rounded-lg font-bold transition-all;
+    @apply bg-light-surface dark:bg-dark-surface hover:bg-gray-200 dark:hover:bg-gray-700 text-light-text dark:text-dark-text border border-light-border dark:border-dark-border px-8 py-3 rounded-md font-bold transition-all;
 }
 
 .quit-btn {
@@ -58,7 +58,7 @@
 
 /* Leaderboard */
 .leaderboard-board {
-    @apply w-full max-w-2xl bg-light-surface dark:bg-dark-surface rounded-2xl border border-light-border dark:border-dark-border p-8 shadow-2xl;
+    @apply w-full max-w-2xl bg-light-surface dark:bg-dark-surface rounded-md border border-light-border dark:border-dark-border p-8 shadow-2xl;
 }
 
 .leaderboard-board h2 {
@@ -70,7 +70,7 @@
 }
 
 .leaderboard-row {
-    @apply flex items-center justify-between bg-light-bg dark:bg-dark-bg rounded-xl p-4 border border-light-border dark:border-dark-border transition-colors;
+    @apply flex items-center justify-between bg-light-bg dark:bg-dark-bg rounded-md p-4 border border-light-border dark:border-dark-border transition-colors;
 }
 
 .leaderboard-row.bust-row {

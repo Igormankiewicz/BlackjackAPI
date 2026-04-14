@@ -5,7 +5,7 @@
 }
 
 .auth-card {
-    @apply w-full max-w-md bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border p-10 rounded-xl shadow-2xl;
+    @apply w-full max-w-md bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border p-10 rounded-md shadow-2xl;
 }
 
 .auth-header {
@@ -29,7 +29,7 @@
 }
 
 .auth-input {
-    @apply w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-lg px-4 py-3 text-light-text dark:text-dark-text transition-all duration-300;
+    @apply w-full bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-md px-4 py-3 text-light-text dark:text-dark-text transition-all duration-300;
 }
 
 .auth-input:focus {
@@ -37,7 +37,7 @@
 }
 
 .submit-btn {
-    @apply w-full py-3 rounded-lg bg-green-primary text-white font-bold tracking-wide transition-all duration-300 uppercase text-sm mt-2;
+    @apply w-full py-3 rounded-md bg-green-primary text-white font-bold tracking-wide transition-all duration-300 uppercase text-sm mt-2;
     border: none;
     cursor: pointer;
 }

@@ -34,7 +34,7 @@
 
 /* Button Animations */
 .menu-btn {
-    @apply text-left px-4 py-2 rounded-lg text-gray-600 dark:text-gray-400 transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden;
+    @apply text-left px-4 py-2 rounded-md text-gray-600 dark:text-gray-400 transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden;
     background: transparent;
     border: none;
 }
@@ -64,5 +64,5 @@ b { @apply text-green-primary dark:text-green-accent font-semibold; }
 .tech-field { @apply flex gap-4 mb-6; }
 
 .tech-card {
-    @apply bg-light-surface dark:bg-dark-surface p-4 rounded-xl border border-light-border dark:border-dark-border text-center font-mono text-green-primary dark:text-green-accent;
+    @apply bg-light-surface dark:bg-dark-surface p-4 rounded-md border border-light-border dark:border-dark-border text-center font-mono text-green-primary dark:text-green-accent;
 }

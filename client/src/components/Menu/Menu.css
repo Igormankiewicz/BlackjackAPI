@@ -41,7 +41,7 @@
 .menu-header h2 { @apply border-none mb-0 text-4xl font-bold; }
 
 .create-room-btn {
-    @apply bg-green-primary hover:bg-green-hover text-white px-6 py-2 rounded-lg font-bold transition-all shadow-lg shadow-green-primary/10;
+    @apply bg-green-primary hover:bg-green-hover text-white px-6 py-2 rounded-md font-bold transition-all shadow-lg shadow-green-primary/10;
 }
 
 /* Room Grid */
@@ -52,7 +52,7 @@
 .room-grid { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
 
 .room-card {
-    @apply bg-light-surface dark:bg-dark-surface p-6 rounded-xl border border-light-border dark:border-dark-border flex justify-between items-center transition-all hover:border-green-primary/50 dark:hover:border-green-accent/50;
+    @apply bg-light-surface dark:bg-dark-surface p-6 rounded-md border border-light-border dark:border-dark-border flex justify-between items-center transition-all hover:border-green-primary/50 dark:hover:border-green-accent/50;
 }
 
 .room-host { @apply block text-lg font-bold text-light-text dark:text-white; }
