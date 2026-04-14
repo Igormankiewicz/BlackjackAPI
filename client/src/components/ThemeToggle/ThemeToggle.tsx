@@ -29,7 +29,7 @@ export default function ThemeToggle() {
       <img
         src={theme === 'dark' ? sunIcon : moonIcon}
         alt={theme === 'dark' ? 'Sun Icon' : 'Moon Icon'}
-        className="w-6 h-6 text-white dark:text-dark-text"
+        className="w-12 h-12 text-white dark:text-dark-text"
         style={{ filter: 'invert(1)' }} // Invert color to white assuming SVG stroke is black initially
       />
     </button>
