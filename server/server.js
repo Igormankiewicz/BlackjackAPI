@@ -5,6 +5,15 @@ const bcrypt = require('bcrypt');
 const { host } = require('pg/lib/defaults');
 const app = express();
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    max: 50, // limit each IP to 50 requests per windowMs
+    message: { error: 'Too many requests, please try again later.' }
+});
+
+app.use(limiter);
 app.use(cors());
 app.use(express.json());
 
@@ -280,6 +289,17 @@ app.post('/createLobby', async (req, res) => {
 
 app.post('/playTurn', async (req, res) => {
     const { playerId, roomId, action } = req.body; // action: 'draw' or 'stop'
+    const keys = ["playerId", "roomId", "action"];
+    const keysFromRequest = Object.keys(req.body);
+
+    if (keysFromRequest.length !== 3 || !keysFromRequest.every(key => keys.includes(key))) {
+        return res.status(400).json({ error: 'Illegal request' });
+    }
+
+    if (action !== 'draw' && action !== 'stop') {
+        return res.status(400).json({ error: 'Invalid action' });
+    }
+
     const tableName = `turns_${roomId}`;
 
     const client = await pool.connect();
@@ -457,6 +477,12 @@ app.post('/joinLobby', async (req, res) => {
 
 app.post('/leaveLobby', async (req, res) => {
     const { playerId, roomId } = req.body;
+    const keys = ["playerId", "roomId"];
+    const keysFromRequest = Object.keys(req.body);
+
+    if (keysFromRequest.length !== 2 || !keysFromRequest.every(key => keys.includes(key))) {
+        return res.status(400).json({ error: 'Illegal request' });
+    }
 
     if (!playerId || !roomId) {
         return res.status(400).json({ error: 'Player ID and Room ID are required' });
@@ -524,6 +550,12 @@ app.post('/leaveLobby', async (req, res) => {
 
 app.post('/closeGame', async (req, res) => {
     const { roomId } = req.body;
+    const keys = ["roomId"];
+    const keysFromRequest = Object.keys(req.body);
+
+    if (keysFromRequest.length !== 1 || !keysFromRequest.every(key => keys.includes(key))) {
+        return res.status(400).json({ error: 'Illegal request' });
+    }
 
     if (!roomId) {
         return res.status(400).json({ error: 'Room ID is required' });
@@ -586,6 +618,7 @@ app.post('/closeGame', async (req, res) => {
 
 app.get('/roomState/:roomId', async (req, res) => {
     const { roomId } = req.params;
+    const { playerId } = req.query;
 
     try {
         const roomResult = await pool.query(
@@ -609,6 +642,26 @@ app.get('/roomState/:roomId', async (req, res) => {
         // A player haslost if they bust, stay, or win (22 points).
         // It's game over if ALL players in the room have haslost = true.
         const isGameOver = playersResult.rows.length > 0 && playersResult.rows.every(p => p.haslost);
+
+        const requestingPlayer = playersResult.rows.find(p => p.id == playerId);
+        let requesterBusted = false;
+        if (requestingPlayer) {
+            const isDoubleAce = requestingPlayer.points === 22 && requestingPlayer.cards && requestingPlayer.cards.split(',').length === 2;
+            requesterBusted = requestingPlayer.points > 21 && !isDoubleAce;
+        }
+
+        if (!isGameOver && !requesterBusted) {
+            playersResult.rows = playersResult.rows.map(p => {
+                if (p.id != playerId) {
+                    if (p.cards) {
+                        const cardCount = p.cards.split(',').length;
+                        p.cards = Array(cardCount).fill('hidden').join(',');
+                        p.points = 0; // hide points too so they don't give away the cards
+                    }
+                }
+                return p;
+            });
+        }
 
         res.status(200).json({
             players: playersResult.rows,

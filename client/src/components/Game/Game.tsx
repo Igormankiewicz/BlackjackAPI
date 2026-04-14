@@ -6,6 +6,10 @@ const cardImageModules = import.meta.glob('../../assets/cards/**/*.png', { eager
 
 const getCardImageUrl = (cardStr: string) => {
     if (!cardStr) return '';
+    if (cardStr === 'hidden') {
+        const mod = cardImageModules['../../assets/cards/back.png'] as { default: string } | undefined;
+        return mod ? mod.default : '';
+    }
     const match = cardStr.match(/^([0-9]+|[AJQKajqk])(spades|hearts|diamonds|clubs)$/i);
     if (!match) return '';
     
@@ -46,7 +50,7 @@ const Game = () => {
 
         const fetchRoomState = async () => {
             try {
-                const res = await fetch(`http://${window.location.hostname}:3000/roomState/${roomId}`);
+                const res = await fetch(`http://${window.location.hostname}:3000/roomState/${roomId}?playerId=${user.id}`);
                 if (res.status === 404) {
                     // Room closed by host, last person left, or inactivity
                     setKickMessage("Room closed due to inactivity or host leaving. Returning to Menu...");
@@ -97,7 +101,7 @@ const Game = () => {
 
             if (response.ok) {
                 // Instantly fetch the updated state instead of waiting for the interval
-                const res = await fetch(`http://${window.location.hostname}:3000/roomState/${roomId}`);
+                const res = await fetch(`http://${window.location.hostname}:3000/roomState/${roomId}?playerId=${user.id}`);
                 if (res.ok) {
                     const data = await res.json();
                     setPlayers(data.players);
