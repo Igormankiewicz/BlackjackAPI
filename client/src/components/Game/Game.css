@@ -1,20 +1,20 @@
 @reference "../../index.css";
 
 .game-container {
-    @apply w-full min-h-screen bg-[#0f172a] text-slate-200 flex flex-col items-center justify-center p-6;
+    @apply w-full min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text flex flex-col items-center justify-center p-6;
 }
 
 .game-board {
-    @apply w-full max-w-4xl bg-[#1e293b] rounded-2xl border border-slate-700 p-8 shadow-2xl shadow-blue-500/5 relative overflow-hidden;
+    @apply w-full max-w-4xl bg-green-board rounded-md border border-green-hover p-8 shadow-2xl shadow-green-primary/10 relative overflow-hidden text-white;
 }
 
 .game-board h2 {
-    @apply text-slate-500 uppercase tracking-widest text-xs font-bold mb-8 border-b border-slate-800 pb-4;
+    @apply text-white/80 uppercase tracking-widest text-xs font-bold mb-8 border-b border-green-hover pb-4;
 }
 
 /* Score Badge */
 .score-badge {
-    @apply bg-[#0f172a] px-4 py-1 rounded-full border border-blue-500/30 text-blue-400 font-mono text-sm font-bold shadow-md;
+    @apply bg-black/30 px-4 py-1 rounded-full border border-green-accent/30 text-green-accent font-mono text-sm font-bold shadow-md;
 }
 
 /* Card Area */
@@ -23,9 +23,8 @@
 }
 
 .card-item {
-    @apply bg-slate-800 border-2 border-slate-600 rounded-xl w-24 h-36 flex items-center justify-center 
-           text-white font-bold text-xl shadow-lg transition-all hover:border-blue-500 hover:-translate-y-2;
-    background-image: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    @apply bg-light-surface dark:bg-dark-surface border-2 border-light-border dark:border-dark-border rounded-md w-24 h-36 flex items-center justify-center 
+           text-light-text dark:text-dark-text font-bold text-xl shadow-lg transition-all hover:border-green-primary dark:hover:border-green-accent hover:-translate-y-2;
 }
 
 /* Status Messages */
@@ -34,11 +33,11 @@
 }
 
 .status-msg.bust { @apply text-red-500; }
-.status-msg.stay { @apply text-blue-400; }
+.status-msg.stay { @apply text-green-accent; }
 
 /* Control Panel */
 .game-controls {
-    @apply flex flex-col gap-8 justify-center items-center border-t border-slate-800 pt-8;
+    @apply flex flex-col gap-8 justify-center items-center border-t border-green-hover pt-8;
 }
 
 .game-btns {
@@ -46,24 +45,24 @@
 }
 
 .hit-btn {
-    @apply bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-lg shadow-blue-500/20;
+    @apply bg-green-primary hover:bg-green-hover text-white px-8 py-3 rounded-md font-bold transition-all shadow-lg shadow-green-primary/20;
 }
 
 .stay-btn {
-    @apply bg-slate-700 hover:bg-slate-600 text-white px-8 py-3 rounded-lg font-bold transition-all;
+    @apply bg-light-surface dark:bg-dark-surface hover:bg-gray-200 dark:hover:bg-gray-700 text-light-text dark:text-dark-text border border-light-border dark:border-dark-border px-8 py-3 rounded-md font-bold transition-all;
 }
 
 .quit-btn {
-    @apply text-slate-500 hover:text-red-400 transition-colors text-sm font-medium bg-transparent border-none cursor-pointer;
+    @apply text-gray-500 dark:text-gray-400 hover:text-red-500 transition-colors text-sm font-medium bg-transparent border-none cursor-pointer;
 }
 
 /* Leaderboard */
 .leaderboard-board {
-    @apply w-full max-w-2xl bg-[#1e293b] rounded-2xl border border-slate-700 p-8 shadow-2xl;
+    @apply w-full max-w-2xl bg-light-surface dark:bg-dark-surface rounded-md border border-light-border dark:border-dark-border p-8 shadow-2xl;
 }
 
 .leaderboard-board h2 {
-    @apply text-xl font-bold text-center text-blue-400 mb-8 border-b border-slate-800 pb-4;
+    @apply text-xl font-bold text-center text-green-primary dark:text-green-accent mb-8 border-b border-light-border dark:border-dark-border pb-4;
 }
 
 .leaderboard-list {
@@ -71,31 +70,31 @@
 }
 
 .leaderboard-row {
-    @apply flex items-center justify-between bg-slate-800/80 rounded-xl p-4 border border-slate-700 transition-colors;
+    @apply flex items-center justify-between bg-light-bg dark:bg-dark-bg rounded-md p-4 border border-light-border dark:border-dark-border transition-colors;
 }
 
 .leaderboard-row.bust-row {
-    @apply bg-red-950/40 border-red-900/50;
+    @apply bg-red-100 dark:bg-red-950/40 border-red-300 dark:border-red-900/50;
 }
 
 .leaderboard-row .place {
-    @apply w-10 h-10 flex items-center justify-center bg-slate-900 rounded-full font-bold text-slate-300 shadow-inner;
+    @apply w-10 h-10 flex items-center justify-center bg-gray-200 dark:bg-gray-800 rounded-full font-bold text-gray-700 dark:text-gray-300 shadow-inner;
 }
 
 .leaderboard-row .name {
-    @apply flex-1 px-4 font-semibold text-slate-200;
+    @apply flex-1 px-4 font-semibold text-light-text dark:text-dark-text;
 }
 
 .leaderboard-row .score {
-    @apply w-24 text-right font-mono font-bold text-blue-400;
+    @apply w-24 text-right font-mono font-bold text-green-primary dark:text-green-accent;
 }
 
 .leaderboard-row.bust-row .score {
-    @apply text-red-400;
+    @apply text-red-500 dark:text-red-400;
 }
 
 .leaderboard-row .status {
-    @apply w-28 text-right text-xs font-bold uppercase tracking-wider text-slate-500;
+    @apply w-28 text-right text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400;
 }
 
 .leaderboard-row.bust-row .status {
@@ -103,13 +102,13 @@
 }
 
 .leaderboard-row:nth-child(1) .place {
-    @apply bg-yellow-500/20 text-yellow-500 border border-yellow-500/30;
+    @apply bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-500 border border-yellow-300 dark:border-yellow-500/30;
 }
 
 .leaderboard-row:nth-child(2) .place {
-    @apply bg-slate-300/20 text-slate-300 border border-slate-300/30;
+    @apply bg-gray-200 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 border border-gray-300 dark:border-gray-600;
 }
 
 .leaderboard-row:nth-child(3) .place {
-    @apply bg-amber-700/20 text-amber-600 border border-amber-700/30;
+    @apply bg-amber-100 dark:bg-amber-700/20 text-amber-700 dark:text-amber-600 border border-amber-300 dark:border-amber-700/30;
 }

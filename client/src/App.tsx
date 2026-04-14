@@ -4,10 +4,12 @@ import Menu from './components/Menu/Menu';
 import Docs from './Docs';
 import './App.css';
 import Game from './components/Game/Game';
+import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 
 function App() {
   return (
     <Router>
+      <ThemeToggle />
       <Routes>
         {/* Default to login */}
         <Route path="/" element={<Navigate to="/login" />} />

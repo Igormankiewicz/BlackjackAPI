@@ -1,33 +1,33 @@
 @reference "../../index.css";
 
 .menu-container {
-    @apply w-full min-h-screen bg-[#0f172a] text-slate-200;
+    @apply w-full min-h-screen bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text;
 }
 
 /* Navbar Styling */
 .top-nav {
-    @apply flex justify-between items-center px-8 py-4 bg-[#1e293b] border-b border-blue-500/20 sticky top-0 z-50;
+    @apply flex justify-between items-center px-8 py-4 bg-light-surface dark:bg-dark-surface border-b border-light-border dark:border-dark-border sticky top-0 z-40;
 }
 
-.nav-logo { @apply font-bold text-xl tracking-tighter text-white; }
-.nav-logo span { @apply text-blue-500; }
+.nav-logo { @apply font-bold text-xl tracking-tighter text-light-text dark:text-white; }
+.nav-logo span { @apply text-green-primary dark:text-green-accent; }
 
 .nav-actions { @apply flex items-center gap-6; }
 
 .nav-link-btn {
-    @apply text-slate-400 hover:text-blue-400 transition-colors bg-transparent border-none cursor-pointer font-medium;
+    @apply text-gray-600 dark:text-gray-400 hover:text-green-primary dark:hover:text-green-accent transition-colors bg-transparent border-none cursor-pointer font-medium;
 }
 
 .nav-logout-btn {
-    @apply hover:text-red-300 text-red-400 transition-colors bg-transparent border-none cursor-pointer font-medium;
+    @apply hover:text-red-500 dark:hover:text-red-300 text-red-600 dark:text-red-400 transition-colors bg-transparent border-none cursor-pointer font-medium;
 }
 
 .user-profile {
-    @apply flex items-center gap-2 bg-[#0f172a] px-4 py-2 rounded-full border border-slate-700;
+    @apply flex items-center gap-2 bg-light-bg dark:bg-dark-bg px-4 py-2 rounded-full border border-light-border dark:border-dark-border;
 }
 
-.user-label { @apply text-xs text-slate-500 uppercase font-bold; }
-.user-name { @apply text-blue-400 font-mono text-sm; }
+.user-label { @apply text-xs text-gray-500 dark:text-gray-400 uppercase font-bold; }
+.user-name { @apply text-green-primary dark:text-green-accent font-mono text-sm; }
 
 /* Content Area */
 .menu-content {
@@ -35,34 +35,34 @@
 }
 
 .menu-header {
-    @apply flex justify-between items-end mb-12 border-b border-slate-800 pb-6;
+    @apply flex justify-between items-end mb-12 border-b border-light-border dark:border-dark-border pb-6;
 }
 
-.menu-header h2 { @apply border-none mb-0 text-4xl; }
+.menu-header h2 { @apply border-none mb-0 text-4xl font-bold; }
 
 .create-room-btn {
-    @apply bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-bold transition-all shadow-lg shadow-blue-500/10;
+    @apply bg-green-primary hover:bg-green-hover text-white px-6 py-2 rounded-md font-bold transition-all shadow-lg shadow-green-primary/10;
 }
 
 /* Room Grid */
 .room-list-container h3 {
-    @apply text-slate-500 uppercase tracking-widest text-xs font-bold mb-6;
+    @apply text-gray-500 dark:text-gray-400 uppercase tracking-widest text-xs font-bold mb-6;
 }
 
 .room-grid { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
 
 .room-card {
-    @apply bg-[#1e293b] p-6 rounded-xl border border-slate-700 flex justify-between items-center transition-all hover:border-blue-500/50;
+    @apply bg-light-surface dark:bg-dark-surface p-6 rounded-md border border-light-border dark:border-dark-border flex justify-between items-center transition-all hover:border-green-primary/50 dark:hover:border-green-accent/50;
 }
 
-.room-host { @apply block text-lg font-bold text-white; }
-.room-id { @apply block text-sm text-slate-500 font-mono mt-1; }
-.room-status { @apply text-sm text-blue-400 font-mono; }
+.room-host { @apply block text-lg font-bold text-light-text dark:text-white; }
+.room-id { @apply block text-sm text-gray-500 dark:text-gray-400 font-mono mt-1; }
+.room-status { @apply text-sm text-green-primary dark:text-green-accent font-mono; }
 
 .join-btn {
-    @apply bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-bold transition-colors;
+    @apply bg-gray-200 dark:bg-gray-700 hover:bg-green-primary dark:hover:bg-green-primary text-gray-700 dark:text-white hover:text-white px-4 py-2 rounded-md text-sm font-bold transition-colors;
 }
 
 .room-card.empty {
-    @apply col-span-full border-dashed border-slate-800 flex justify-center py-12;
+    @apply col-span-full border-dashed border-light-border dark:border-dark-border flex justify-center py-12;
 }
