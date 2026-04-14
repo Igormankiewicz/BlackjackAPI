@@ -31,7 +31,7 @@ const Docs = () => {
         { name: 'Technologies', id: 'technologies' },
         { name: 'Architecture', id: 'architecture' },
         { name: 'Endpoints', id: 'endpoints' },
-        { name: 'Examples', id: 'examples' },
+        
     ];
 
     return (
@@ -174,70 +174,156 @@ node server.js`}
                 <div id="endpoints" className="doc-section">
                     <h2 className="mb-4">API Endpoints</h2>
                     <p className="mb-8 leading-relaxed text-gray-700 dark:text-slate-300">The backend exposes a RESTful API. Below are the primary routes used for authentication and game management:</p>
-                    
-                    <div className="endpoint-list flex flex-col gap-4">
-                        <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
-                            <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
-                            <span className="path font-mono text-gray-800 dark:text-slate-200">/register</span>
-                            <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Creates a new user account</span>
+                    <div className="endpoint-list flex flex-col gap-12">
+                        <div className="endpoint-wrapper gap-2 flex flex-col mb-12">
+                            <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
+                                <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
+                                <span className="path font-mono text-gray-800 dark:text-slate-200">/register</span>
+                                <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Register a new user</span>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-6 mb-4 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Request Payload (JSON)</span>
+                                    <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded">POST /register</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "login": "player1",
+  "password": "password123"
+}`}
+                                </pre>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-4 mb-2 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Response Payload (JSON)</span>
+                                    <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">200 OK</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "message": "User registered successfully",
+  "user": { "id": 1, "login": "player1" }
+}`}
+                                </pre>
+                            </div>
                         </div>
-                        <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
-                            <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
-                            <span className="path font-mono text-gray-800 dark:text-slate-200">/login</span>
-                            <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Authenticates a user</span>
+                        <div className="endpoint-wrapper gap-2 flex flex-col mb-12">
+                            <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
+                                <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
+                                <span className="path font-mono text-gray-800 dark:text-slate-200">/login</span>
+                                <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Authenticate an existing user</span>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-6 mb-4 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Request Payload (JSON)</span>
+                                    <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded">POST /login</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "login": "player1",
+  "password": "password123"
+}`}
+                                </pre>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-4 mb-2 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Response Payload (JSON)</span>
+                                    <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">200 OK</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "message": "Login successful",
+  "user": { "id": 1, "login": "player1" }
+}`}
+                                </pre>
+                            </div>
                         </div>
-                        <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
-                            <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
-                            <span className="path font-mono text-gray-800 dark:text-slate-200">/createLobby</span>
-                            <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Initializes a new game room</span>
+                        <div className="endpoint-wrapper gap-2 flex flex-col mb-12">
+                            <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
+                                <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
+                                <span className="path font-mono text-gray-800 dark:text-slate-200">/createLobby</span>
+                                <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Create a new game room</span>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-6 mb-4 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Request Payload (JSON)</span>
+                                    <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded">POST /createLobby</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "hostId": 1,
+  "hostName": "player1"
+}`}
+                                </pre>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-4 mb-2 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Response Payload (JSON)</span>
+                                    <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">200 OK</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "message": "Room created successfully",
+  "roomId": 15
+}`}
+                                </pre>
+                            </div>
                         </div>
-                        <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
-                            <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
-                            <span className="path font-mono text-gray-800 dark:text-slate-200">/joinLobby</span>
-                            <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Adds a player to an active room</span>
+                        <div className="endpoint-wrapper gap-2 flex flex-col mb-12">
+                            <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
+                                <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
+                                <span className="path font-mono text-gray-800 dark:text-slate-200">/joinLobby</span>
+                                <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Join an existing game room</span>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-6 mb-4 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Request Payload (JSON)</span>
+                                    <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded">POST /joinLobby</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "playerId": 2,
+  "playerName": "player2",
+  "roomId": 15
+}`}
+                                </pre>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-4 mb-2 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Response Payload (JSON)</span>
+                                    <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">200 OK</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "message": "Joined room 15 successfully"
+}`}
+                                </pre>
+                            </div>
                         </div>
-                        <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
-                            <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
-                            <span className="path font-mono text-gray-800 dark:text-slate-200">/playTurn</span>
-                            <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Executes a 'draw' or 'stop' action</span>
-                        </div>
-                        <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
-                            <span className="method get font-bold px-3 py-1 rounded bg-blue-500/20 text-blue-400 text-sm">GET</span>
-                            <span className="path font-mono text-gray-800 dark:text-slate-200">/roomState/:roomId</span>
-                            <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Fetches live game data for polling</span>
-                        </div>
-                        <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
-                            <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
-                            <span className="path font-mono text-gray-800 dark:text-slate-200">/closeGame</span>
-                            <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Deletes the room and frees resources</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="examples" className="doc-section mb-12">
-                    <h2 className="mb-4">Implementation Examples</h2>
-                    <p className="mb-8 leading-relaxed text-gray-700 dark:text-slate-300">Here is a standard interaction flow showing how the frontend communicates with the <code>/playTurn</code> endpoint when a user decides to draw a card:</p>
-                    
-                    <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mb-8 shadow-lg">
-                        <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-3 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
-                            <span>Request Payload (JSON)</span>
-                            <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded">POST /playTurn</span>
-                        </div>
-                        <pre className="p-6 text-sm text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+                        <div className="endpoint-wrapper gap-2 flex flex-col mb-12">
+                            <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
+                                <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
+                                <span className="path font-mono text-gray-800 dark:text-slate-200">/playTurn</span>
+                                <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Perform a game action (draw a card or stop)</span>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-6 mb-4 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Request Payload (JSON)</span>
+                                    <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded">POST /playTurn</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
 {`{
   "playerId": 42,
   "roomId": 15,
   "action": "draw" // or "stop"
 }`}
-                        </pre>
-                    </div>
-
-                    <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden shadow-lg">
-                        <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-3 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
-                            <span>Response Payload (JSON)</span>
-                            <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">200 OK</span>
-                        </div>
-                        <pre className="p-6 text-sm text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+                                </pre>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-4 mb-2 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Response Payload (JSON)</span>
+                                    <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">200 OK</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
 {`{
   "message": "Card drawn",
   "card": "10hearts",
@@ -246,7 +332,80 @@ node server.js`}
   "finished": true,
   "isGameOver": false
 }`}
-                        </pre>
+                                </pre>
+                            </div>
+                        </div>
+                        <div className="endpoint-wrapper gap-2 flex flex-col mb-12">
+                            <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
+                                <span className="method get font-bold px-3 py-1 rounded bg-blue-500/20 text-blue-400 text-sm">GET</span>
+                                <span className="path font-mono text-gray-800 dark:text-slate-200">/roomState/:roomId</span>
+                                <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Fetch the current status of all players in a room</span>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-4 mb-2 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Response Payload (JSON)</span>
+                                    <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">200 OK</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "players": [
+    { "id": 1, "name": "player1", "points": 14, "cards": "10hearts,4spades", "haslost": false }
+  ],
+  "isGameOver": false,
+  "hostId": 1
+}`}
+                                </pre>
+                            </div>
+                        </div>
+                        <div className="endpoint-wrapper gap-2 flex flex-col mb-12">
+                            <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
+                                <span className="method get font-bold px-3 py-1 rounded bg-blue-500/20 text-blue-400 text-sm">GET</span>
+                                <span className="path font-mono text-gray-800 dark:text-slate-200">/displayRooms</span>
+                                <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">Retrieve a list of all active rooms</span>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-4 mb-2 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Response Payload (JSON)</span>
+                                    <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">200 OK</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "rooms": [
+    { "roomId": "15", "hostId": 1, "hostName": "player1", "playerCount": 2 }
+  ]
+}`}
+                                </pre>
+                            </div>
+                        </div>
+                        <div className="endpoint-wrapper gap-2 flex flex-col mb-12">
+                            <div className="endpoint-item flex items-center gap-4 bg-gray-200 dark:bg-slate-800/50 p-4 rounded-lg border border-gray-300 dark:border-slate-700 hover:border-slate-500 transition-colors">
+                                <span className="method post font-bold px-3 py-1 rounded bg-green-500/20 text-green-400 text-sm">POST</span>
+                                <span className="path font-mono text-gray-800 dark:text-slate-200">/closeGame</span>
+                                <span className="desc text-gray-600 dark:text-slate-400 text-sm ml-auto">End a game session and clean up database tables</span>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-6 mb-4 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Request Payload (JSON)</span>
+                                    <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded">POST /closeGame</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "roomId": 15
+}`}
+                                </pre>
+                            </div>
+                            <div className="example-block bg-gray-100 dark:bg-[#0f172a] rounded-md border border-gray-300 dark:border-slate-700 overflow-hidden mt-4 mb-2 shadow-sm w-full ml-8">
+                                <div className="block-header bg-gray-200 dark:bg-slate-800 px-4 py-2 border-b border-gray-300 dark:border-slate-700 font-mono text-xs text-gray-600 dark:text-slate-400 flex justify-between items-center">
+                                    <span>Response Payload (JSON)</span>
+                                    <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded">200 OK</span>
+                                </div>
+                                <pre className="p-4 text-xs text-gray-700 dark:text-slate-300 overflow-x-auto leading-relaxed">
+{`{
+  "message": "Game closed successfully"
+}`}
+                                </pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
